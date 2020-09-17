@@ -1,43 +1,24 @@
 package GraphStructure;
 
 import java.util.ArrayList;
-import java.util.List;
 
-public class ListVertices {
+@SuppressWarnings("serial")
+public class ListVertices extends ArrayList<Vertex> {
 
-	private List<Vertex> list = new ArrayList<Vertex>();
 	private double value;
 	
-	public ListVertices(List<Vertex> list) {
-		this.list = list;
+	public ListVertices() {
+		super();
 		this.value = 0;
-	}
-
-	public void add(Vertex vertex) {
-		this.list.add(vertex);
-	}
-	
-	public Vertex get(int i) {
-		return list.get(i);
-	}
-	
-	public void set(int i, Vertex vertex) {
-		this.list.set(i, vertex);
 	}
 	
 	public double getValue() {
 		return value;
 	}
 	
-	public void setValue(double value) {
-		this.value = value;
-	}
-	
 	public double calcSum(int i) {
 		value = 0;
-		for (Vertex v : list) {
-			value += v.getValue(i);
-		}
+		this.forEach((vertex) -> value += vertex.getValue(i));
 		return value;
 	}
 	
