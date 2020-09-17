@@ -1,11 +1,16 @@
 package GraphStructure;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ListEdges {
-	private ArrayList<Edge> list;
+	private List<Edge> list = new ArrayList<Edge>();
 	private double value;
 	
+	public ListEdges(List<Edge> list) {
+		this.list = list;
+		this.value = 0;
+	}
 	
 	public void addEdge(Edge e) {
 		this.list.add(e);
@@ -21,7 +26,7 @@ public class ListEdges {
 	
 	// GETTERS
 	
-	public Edge getEdge(int i) {
+	public Edge get(int i) {
 		return list.get(i);
 	}
 	
@@ -31,7 +36,7 @@ public class ListEdges {
 	
 	// SETTERS
 	
-	public void setEdge(int i, Edge e) {
+	public void set(int i, Edge e) {
 		this.list.set(i, e);
 	}
 }
