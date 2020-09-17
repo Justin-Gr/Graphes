@@ -104,4 +104,8 @@ public class Graph {
 		this.listAdjacent.set(i, listAdjacent);
 	}
 	
+	public ListVertices getListVertices() {
+		return this.listVertices;
+	}
+	
 }

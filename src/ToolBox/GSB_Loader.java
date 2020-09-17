@@ -30,13 +30,6 @@ public abstract class GSB_Loader {
                
         scanner.nextLine();
         
-        System.out.println("Nom du graphe : " + graphName);
-        System.out.println("Dirigé : " + directed);
-        System.out.println("Nombre de sommets : " + verticesNb);
-        System.out.println("Nombre de valeurs par sommet : " + verticesValueNb);
-        System.out.println("Nombre d'arête : " + edgesNb);
-        System.out.println("Nombre de valeurs par arête : " + edgesValueNb);
-        
         Graph g = new Graph(graphName, directed, verticesNb, verticesValueNb, edgesNb, edgesValueNb);
         
         String line;
@@ -59,6 +52,7 @@ public abstract class GSB_Loader {
         
         scanner.nextLine();
         
+        // Generate all edges
         for(int i = 0; i < edgesNb; i++) {
         	line = scanner.nextLine();
         	String[] params = line.split(" ");
@@ -76,6 +70,6 @@ public abstract class GSB_Loader {
      
         scanner.close();
 		
-		return null;
+		return g;
 	}
 }
