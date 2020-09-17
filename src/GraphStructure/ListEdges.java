@@ -8,6 +8,7 @@ public class ListEdges extends ArrayList<Edge> {
 	private double value;
 	
 	public ListEdges() {
+		super();
 		this.value = 0;
 	}
 	
@@ -17,7 +18,7 @@ public class ListEdges extends ArrayList<Edge> {
 	
 	public double calcSum(int i) {
 		this.value = 0;
-		this.forEach((edge) -> value += edge.getValue(i));
+		this.forEach((edge) -> this.value += edge.getValue(i));
 		return this.value;
 	}
 	
