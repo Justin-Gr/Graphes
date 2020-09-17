@@ -17,9 +17,9 @@ public class ListVertices extends ArrayList<Vertex> {
 	}
 	
 	public double calcSum(int i) {
-		value = 0;
-		this.forEach((vertex) -> value += vertex.getValue(i));
-		return value;
+		this.value = 0;
+		this.forEach((vertex) -> this.value += vertex.getValue(i));
+		return this.value;
 	}
 	
 }
