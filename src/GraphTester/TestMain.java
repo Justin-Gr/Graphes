@@ -7,7 +7,7 @@ import ToolBox.GSB_Loader;
 public class TestMain {
 	
 	public static void main(String[] args) {
-		System.out.println("Dï¿½but de lecture");
+		System.out.println("Début de lecture");
 		try {
 			GSB_Loader.loadFile("assets/GrapheStructureNonOriente.gsb");
 		} catch (FileNotFoundException e) {
