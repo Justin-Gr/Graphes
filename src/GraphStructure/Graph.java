@@ -6,20 +6,36 @@ import java.util.List;
 
 public class Graph {
 	
+	private String name;
 	private boolean directed;
 	private int verticesNb;
+	private int verticesValuesNb;
 	private int edgesNb;
+	private int edgesValuesNb;
 	private ListVertices listVertices;
 	private ListEdges listEdges;
-	private List<LinkedList<Integer>> listAdjacent = new ArrayList<LinkedList<Integer>>();
+	private List<LinkedList<Integer>> listAdjacent;
 	
-	public Graph(boolean directed, ListVertices listVertices, ListEdges listEdges, List<LinkedList<Integer>> listAdjacent) {
+	public Graph(String name, boolean directed, int verticesNb, int verticesValuesNb, int edgesNb, int edgesValuesNb) {
+		this.name = name;
 		this.directed = directed;
-		this.listVertices = listVertices;
-		this.listEdges = listEdges;
-		this.listAdjacent = listAdjacent;
+		this.verticesNb = verticesNb;
+		this.verticesValuesNb = verticesValuesNb;
+		this.edgesNb = edgesNb;
+		this.edgesValuesNb = edgesValuesNb;
+		this.listVertices = new ListVertices();
+		this.listEdges = new ListEdges();
+		this.listAdjacent  = new ArrayList<LinkedList<Integer>>();
 	}
 
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
 	public boolean isDirected() {
 		return directed;
 	}
@@ -35,6 +51,14 @@ public class Graph {
 	public void setVerticesNb(int verticesNb) {
 		this.verticesNb = verticesNb;
 	}
+	
+	public int getVerticesValuesNb() {
+		return verticesValuesNb;
+	}
+
+	public void setVerticesValuesNb(int verticesValuesNb) {
+		this.verticesValuesNb = verticesValuesNb;
+	}
 
 	public int getEdgesNb() {
 		return edgesNb;
@@ -44,20 +68,32 @@ public class Graph {
 		this.edgesNb = edgesNb;
 	}
 
+	public int getEdgesValuesNb() {
+		return edgesValuesNb;
+	}
+
+	public void setEdgesValuesNb(int edgesValuesNb) {
+		this.edgesValuesNb = edgesValuesNb;
+	}
+	
 	public Vertex getVertex(int i) {
 		return listVertices.get(i);
 	}
 
-	public void setVertex(int i, Vertex vertex) {
-		this.listVertices.set(i, vertex);
+	public void addVertex(Vertex vertex) {
+		if (!listVertices.contains(vertex)) {
+			this.listVertices.add(vertex);
+		}
 	}
 
-	public Edge getEdges(int i) {
+	public Edge getEdge(int i) {
 		return listEdges.get(i);
 	}
 
-	public void setEdges(int i, Edge edge) {
-		this.listEdges.set(i, edge);
+	public void addEdge(Edge edge) {
+		if (!listEdges.contains(edge)) {
+			this.listEdges.add(edge);
+		}
 	}
 
 	public LinkedList<Integer> getListAdjacent(int i) {
