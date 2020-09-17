@@ -1,5 +1,6 @@
 package GraphTester;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -23,7 +24,7 @@ public abstract class Parcours {
 		
 		while(!f.isEmpty()) {
 			Vertex v = f.peek();
-			Vertex[] neighbors = g.getNeighbors(a);
+			ArrayList<Vertex> neighbors = g.getNeighbors(a);
 		}
 	}
 }

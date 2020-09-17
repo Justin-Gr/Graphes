@@ -108,4 +108,13 @@ public class Graph {
 		return this.listVertices;
 	}
 	
+	public ArrayList<Vertex> getNeighbors(Vertex vertex) {
+		LinkedList<Integer> list = listAdjacent.get(vertex.getId());
+		ArrayList<Vertex> vertices = new ArrayList<Vertex>();
+		for (Integer i : list) {
+			vertices.add(this.getVertex(i));
+		}
+		return vertices;
+	}
+	
 }
