@@ -4,8 +4,6 @@ public class Edge {
 	private final int id;
 	private int indexInitialVertex;
 	private int indexFinalVertex;
-	private String nameInitialVertex;
-	private String nameFinalVertex;
 	private final int valuesNb;
 	private double[] values;
 	
@@ -16,8 +14,6 @@ public class Edge {
 		this.id = id;
 		this.indexInitialVertex = indexInitialVertex;
 		this.indexFinalVertex = indexFinalVertex;
-		this.nameInitialVertex = nameInitialVertex;
-		this.nameFinalVertex = nameFinalVertex;
 		this.valuesNb = valuesNb;
 		this.values = values;
 	}
@@ -34,14 +30,6 @@ public class Edge {
 	
 	public int getIndexFinalVertex() {
 		return indexFinalVertex;
-	}
-	
-	public String getNameInitialVertex() {
-		return nameInitialVertex;
-	}
-	
-	public String getNameFinalVertex() {
-		return nameFinalVertex;
 	}
 	
 	public int getNbValues() {
@@ -64,14 +52,6 @@ public class Edge {
 	
 	public void setIndexFinalVertex(int indexFinalVertex) {
 		this.indexFinalVertex = indexFinalVertex;
-	}
-	
-	public void setNameInitialVertex(String nameInitialVertex) {
-		this.nameInitialVertex = nameInitialVertex;
-	}
-	
-	public void setNameFinalVertex(String nameFinalVertex) {
-		this.nameFinalVertex = nameFinalVertex;
 	}
 	
 	public void setValues(double[] values) {
