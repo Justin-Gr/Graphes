@@ -8,14 +8,12 @@ public class Edge {
 	private double[] values;
 	
 	
-	public Edge(int id, int indexInitialVertex, int indexFinalVertex, String nameInitialVertex, String nameFinalVertex,
-			int valuesNb, double[] values) {
-		super();
+	public Edge(int id, int indexInitialVertex, int indexFinalVertex, int valuesNb) {
 		this.id = id;
 		this.indexInitialVertex = indexInitialVertex;
 		this.indexFinalVertex = indexFinalVertex;
 		this.valuesNb = valuesNb;
-		this.values = values;
+		this.values = new double[valuesNb];
 	}
 
 	// GETTERS

@@ -28,10 +28,20 @@ public abstract class GSB_Loader {
         edgesNb = Integer.parseInt(scanner.nextLine().split(" ")[1]);
         edgesValueNb = Integer.parseInt(scanner.nextLine().split(" ")[1]);
                
+        scanner.nextLine();
+        
+        System.out.println("Nom du graphe : " + graphName);
+        System.out.println("Dirigé : " + directed);
+        System.out.println("Nombre de sommets : " + verticesNb);
+        System.out.println("Nombre de valeurs par sommet : " + verticesValueNb);
+        System.out.println("Nombre d'arête : " + edgesNb);
+        System.out.println("Nombre de valeurs par arête : " + edgesValueNb);
+        
         Graph g = new Graph(graphName, directed, verticesNb, verticesValueNb, edgesNb, edgesValueNb);
         
         String line;
         
+        // Generate all vertices
         for(int i = 0; i < verticesNb; i++) {
         	line = scanner.nextLine();
         	String[] params = line.split(" ");
@@ -45,6 +55,23 @@ public abstract class GSB_Loader {
         	}
         	
         	g.addVertex(v);
+        }
+        
+        scanner.nextLine();
+        
+        for(int i = 0; i < edgesNb; i++) {
+        	line = scanner.nextLine();
+        	String[] params = line.split(" ");
+        	int initialId = Integer.parseInt(params[0]);
+        	int finalId = Integer.parseInt(params[1]);
+        	
+        	Edge e = new Edge(i, initialId, finalId, verticesValueNb);
+        			
+        	for(int j = 0; j < verticesValueNb; j++) {
+        		e.setValue(j, Integer.parseInt(params[2+j]));
+        	}
+        	
+        	g.addEdge(e);
         }
      
         scanner.close();
