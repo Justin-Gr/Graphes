@@ -1,5 +1,7 @@
 package GraphStructure;
 
+import java.util.Arrays;
+
 public class Edge {
 	private final int id;
 	private int indexInitialVertex;
@@ -58,5 +60,9 @@ public class Edge {
 	
 	public void setValue(int i, double value) {
 		this.values[i] = value;
+	}
+	
+	public String toString() {
+		return("( " + indexInitialVertex + " -> " + indexFinalVertex + " ) valeurs : " + Arrays.toString(getValues()));
 	}
 }
