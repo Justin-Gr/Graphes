@@ -59,10 +59,10 @@ public abstract class GSB_Loader {
         	int initialId = Integer.parseInt(params[0]);
         	int finalId = Integer.parseInt(params[1]);
         	        	
-        	Edge e = new Edge(i, initialId, finalId, verticesValueNb);
+        	Edge e = new Edge(i, initialId, finalId, edgesValueNb);
         			
-        	for(int j = 0; j < verticesValueNb; j++) {
-        		e.setValue(j, Integer.parseInt(params[2+j]));
+        	for(int j = 0; j < edgesValueNb; j++) {
+        		e.setValue(j, Double.parseDouble(params[2+j]));
         	}
         	        	
         	g.addEdge(e);

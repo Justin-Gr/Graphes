@@ -1,6 +1,7 @@
 package GraphStructure;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import static java.util.stream.Collectors.toList;
@@ -15,7 +16,7 @@ public class Graph {
 	private int edgesValuesNb;
 	private ListVertices listVertices;
 	private ListEdges listEdges;
-	private List<LinkedList<Integer>> listAdjacent;
+	private List<LinkedList<Edge>> listAdjacent;
 	
 	public Graph(String name, boolean directed, int verticesNb, int verticesValuesNb, int edgesNb, int edgesValuesNb) {
 		this.name = name;
@@ -26,7 +27,7 @@ public class Graph {
 		this.edgesValuesNb = edgesValuesNb;
 		this.listVertices = new ListVertices();
 		this.listEdges = new ListEdges();
-		this.listAdjacent  = new ArrayList<LinkedList<Integer>>();
+		this.listAdjacent  = new ArrayList<LinkedList<Edge>>();
 	}
 
 	public String getName() {
@@ -85,7 +86,7 @@ public class Graph {
 		if (!listVertices.contains(vertex)) {
 			this.listVertices.add(vertex);
 			
-			this.listAdjacent.add(vertex.getId(), new LinkedList<Integer>());
+			this.listAdjacent.add(vertex.getId(), new LinkedList<Edge>());
 		}
 	}
 
@@ -100,27 +101,27 @@ public class Graph {
 			int idInitial = edge.getIndexInitialVertex();
 			int idFinal = edge.getIndexFinalVertex();
 			
-			LinkedList<Integer> successorsA = listAdjacent.get(idInitial);
+			LinkedList<Edge> successorsA = listAdjacent.get(idInitial);
 			
-			if(!successorsA.contains(idFinal)) {
-				successorsA.add(idFinal);
+			if(!successorsA.contains(edge)) {
+				successorsA.add(edge);
 			}
 			
 			if(!this.directed) {
-				LinkedList<Integer> successorsB = listAdjacent.get(idFinal);
+				LinkedList<Edge> successorsB = listAdjacent.get(idFinal);
 				
-				if(!successorsB.contains(idInitial)) {
-					successorsB.add(idInitial);
+				if(!successorsB.contains(edge)) {
+					successorsB.add(edge);
 				}
 			}
 		}
 	}
 
-	public LinkedList<Integer> getListAdjacent(int i) {
+	public LinkedList<Edge> getListAdjacent(int i) {
 		return listAdjacent.get(i);
 	}
 
-	public void setListAdjacent(int i, LinkedList<Integer> listAdjacent) {
+	public void setListAdjacent(int i, LinkedList<Edge> listAdjacent) {
 		this.listAdjacent.set(i, listAdjacent);
 	}
 	
@@ -129,7 +130,7 @@ public class Graph {
 	}
 	
 	public List<Vertex> getNeighbors(Vertex vertex) {
-		LinkedList<Integer> list = listAdjacent.get(vertex.getId());
+		LinkedList<Edge> list = listAdjacent.get(vertex.getId());
 		
 		/*List<Vertex> vertices = new ArrayList<Vertex>();
 		for (Integer i : list) {
@@ -138,6 +139,7 @@ public class Graph {
 		return vertices;*/
 	
 		return list.stream()
+				.map(Edge::getIndexFinalVertex)
 				.map(this::getVertex)
 				.collect(toList());
 	}
@@ -152,4 +154,46 @@ public class Graph {
 		}
 	}
 	
+	public void dijkstra(Vertex s) {
+		ListVertices z = (ListVertices) this.listVertices.clone();
+		z.remove(s);
+		double[] dist = new double[this.verticesNb];
+		
+		// Initialisation
+		Arrays.fill(dist, Double.MAX_VALUE);
+		dist[s.getId()] = 0;
+		for(Edge e : this.listAdjacent.get(s.getId())) {
+			dist[e.getIndexFinalVertex()] = e.getValue(0);
+		}
+		
+		while(!z.isEmpty()) {
+			double distMin = Double.MAX_VALUE;
+			int idMin = -1;
+			
+			for(int i = 0; i < dist.length; i++) {
+				if(z.contains(getVertex(i)) && dist[i] < distMin) {
+					idMin = i;
+					distMin = dist[i];
+				}
+			}
+			
+			if(idMin == -1) {
+				break;
+			}
+			
+			Vertex x = getVertex(idMin);
+			z.remove(x);
+			
+			for(Edge e : this.listAdjacent.get(x.getId())) {
+				int i = e.getIndexFinalVertex();
+				if (z.contains(getVertex(i))) {
+					if(dist[x.getId()] + e.getValue(0) < dist[i]) {
+						dist[i] = dist[x.getId()] + e.getValue(0);
+					}
+				}
+			}
+		}
+		System.out.println(Arrays.toString(dist));
+	}
 }
+ 
