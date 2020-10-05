@@ -84,6 +84,8 @@ public class Graph {
 	public void addVertex(Vertex vertex) {
 		if (!listVertices.contains(vertex)) {
 			this.listVertices.add(vertex);
+			
+			this.listAdjacent.add(vertex.getId(), new LinkedList<Integer>());
 		}
 	}
 
@@ -94,6 +96,15 @@ public class Graph {
 	public void addEdge(Edge edge) {
 		if (!listEdges.contains(edge)) {
 			this.listEdges.add(edge);
+			
+			int idInitial = edge.getIndexInitialVertex();
+			int idFinal = edge.getIndexFinalVertex();
+			
+			LinkedList<Integer> neighbors = listAdjacent.get(idInitial);
+			
+			if(!neighbors.contains(idFinal)) {
+				neighbors.add(idFinal);
+			}
 		}
 	}
 
