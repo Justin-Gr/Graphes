@@ -142,4 +142,14 @@ public class Graph {
 				.collect(toList());
 	}
 	
+	public void printListAdjacent() {
+		for(int i = 0; i < this.listAdjacent.size(); i++) {
+			System.out.print("Les successeurs du sommet n°" + i + " : [ ");
+			for (int j = 0; j < this.listAdjacent.get(i).size(); j++) {
+				System.out.print(this.listAdjacent.get(i).get(j) + " ");
+			}
+			System.out.println("]");
+		}
+	}
+	
 }
