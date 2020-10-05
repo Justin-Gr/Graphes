@@ -100,10 +100,18 @@ public class Graph {
 			int idInitial = edge.getIndexInitialVertex();
 			int idFinal = edge.getIndexFinalVertex();
 			
-			LinkedList<Integer> neighbors = listAdjacent.get(idInitial);
+			LinkedList<Integer> successorsA = listAdjacent.get(idInitial);
 			
-			if(!neighbors.contains(idFinal)) {
-				neighbors.add(idFinal);
+			if(!successorsA.contains(idFinal)) {
+				successorsA.add(idFinal);
+			}
+			
+			if(!this.directed) {
+				LinkedList<Integer> successorsB = listAdjacent.get(idFinal);
+				
+				if(!successorsB.contains(idInitial)) {
+					successorsB.add(idInitial);
+				}
 			}
 		}
 	}
