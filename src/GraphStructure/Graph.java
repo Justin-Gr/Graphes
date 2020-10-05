@@ -3,6 +3,7 @@ package GraphStructure;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import static java.util.stream.Collectors.toList;
 
 public class Graph {
 	
@@ -108,13 +109,18 @@ public class Graph {
 		return this.listVertices;
 	}
 	
-	public ArrayList<Vertex> getNeighbors(Vertex vertex) {
+	public List<Vertex> getNeighbors(Vertex vertex) {
 		LinkedList<Integer> list = listAdjacent.get(vertex.getId());
-		ArrayList<Vertex> vertices = new ArrayList<Vertex>();
+		
+		/*List<Vertex> vertices = new ArrayList<Vertex>();
 		for (Integer i : list) {
 			vertices.add(this.getVertex(i));
 		}
-		return vertices;
+		return vertices;*/
+	
+		return list.stream()
+				.map(this::getVertex)
+				.collect(toList());
 	}
 	
 }

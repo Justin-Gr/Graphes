@@ -9,7 +9,7 @@ public class TestMain {
 	public static void main(String[] args) {
 		System.out.println("Début de lecture");
 		try {
-			GSB_Loader.loadFile("assets/GrapheStructureNonOriente.gsb");
+			GSB_Loader.loadFile("assets/CommunesFrance_5000_50.gsb");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
