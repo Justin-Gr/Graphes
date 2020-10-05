@@ -26,7 +26,7 @@ public abstract class Parcours {
 		
 		while(!f.isEmpty()) {
 			Vertex v = f.peek();
-			ArrayList<Vertex> neighbors = g.getNeighbors(v);
+			List<Vertex> neighbors = g.getNeighbors(v);
 			for(Vertex n : neighbors) {
 				if(!marque[n.getId()]) {
 					marque[n.getId()] = true;
