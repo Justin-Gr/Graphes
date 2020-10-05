@@ -122,13 +122,7 @@ public class Graph {
 	
 	public List<Vertex> getNeighbors(Vertex vertex) {
 		LinkedList<Integer> list = listAdjacent.get(vertex.getId());
-		
-		/*List<Vertex> vertices = new ArrayList<Vertex>();
-		for (Integer i : list) {
-			vertices.add(this.getVertex(i));
-		}
-		return vertices;*/
-	
+			
 		return list.stream()
 				.map(this::getVertex)
 				.collect(toList());

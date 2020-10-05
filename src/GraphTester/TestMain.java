@@ -11,8 +11,8 @@ public class TestMain {
 		try {
 			Graph g = GSB_Loader.loadFile("assets/GrapheStructureNonOriente.gsb");
 
-			System.out.println("DÃ©but de parcours");
-			Parcours.ParcoursLargeur(g, g.getVertex(0));
+			System.out.println("Début de parcours");
+			Parcours.ParcoursProfondeur(g, g.getVertex(0));
 			System.out.println("Fin de parcours");
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();

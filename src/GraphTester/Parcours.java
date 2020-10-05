@@ -1,6 +1,5 @@
 package GraphTester;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -51,21 +50,25 @@ public abstract class Parcours {
 			marque[v.getId()] = false;
 			traite[v.getId()] = 0;
 		}
-		marque[a.getId()] = true;
 		pile.add(a);
 		
-		Vertex v = a;
-		while(!pile.empty()) {
+		Vertex v;
+		while(!pile.empty()) {			
+			v = pile.pop();
+			
+			if (!marque[v.getId()]) {
+				marque[v.getId()] = true;
+				traite[v.getId()] = p++;
+				System.out.println(v.getId());
+			}
+			
 			List<Vertex> neighbors = g.getNeighbors(v);
 			for (Vertex n : neighbors) {
 				if (!marque[n.getId()]) {
-					marque[n.getId()] = true;
-					pile.add(n);
+					pile.push(n);
 				}
 			}
-			v = pile.pop();
-			traite[v.getId()] = p;
-			p++;
+			
 		}
 	}
 }
