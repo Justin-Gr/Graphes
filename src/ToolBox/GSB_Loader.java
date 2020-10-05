@@ -46,7 +46,7 @@ public abstract class GSB_Loader {
         	for(int j = 0; j < verticesValueNb; j++) {
         		v.setValue(j, Integer.parseInt(params[2+j]));
         	}
-        	
+        	        	        	
         	g.addVertex(v);
         }
         
@@ -58,17 +58,17 @@ public abstract class GSB_Loader {
         	String[] params = line.split(" ");
         	int initialId = Integer.parseInt(params[0]);
         	int finalId = Integer.parseInt(params[1]);
-        	
+        	        	
         	Edge e = new Edge(i, initialId, finalId, verticesValueNb);
         			
         	for(int j = 0; j < verticesValueNb; j++) {
         		e.setValue(j, Integer.parseInt(params[2+j]));
         	}
-        	
+        	        	
         	g.addEdge(e);
         }
      
-        scanner.close();
+        scanner.close();        
 		
 		return g;
 	}
