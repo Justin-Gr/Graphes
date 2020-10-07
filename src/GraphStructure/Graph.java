@@ -109,9 +109,9 @@ public class Graph {
 			
 			if(!this.directed) {
 				LinkedList<Edge> successorsB = listAdjacent.get(idFinal);
-				
-				if(!successorsB.contains(edge)) {
-					successorsB.add(edge);
+				Edge opposite = edge.opposite();
+				if(!successorsB.contains(opposite)) {
+					successorsB.add(opposite);
 				}
 			}
 		}
@@ -140,7 +140,7 @@ public class Graph {
 	
 	public void printListAdjacent() {
 		for(int i = 0; i < this.listAdjacent.size(); i++) {
-			System.out.print("Les successeurs du sommet nï¿½" + i + " : [ ");
+			System.out.print("Les successeurs du sommet n°" + i + " : [ ");
 			for (int j = 0; j < this.listAdjacent.get(i).size(); j++) {
 				System.out.print(this.listAdjacent.get(i).get(j) + " ");
 			}
@@ -188,6 +188,7 @@ public class Graph {
 			}
 		}
 		System.out.println(Arrays.toString(dist));
+		System.out.println("Distance Paris-Lyon : " + dist[1266]);
 	}
 }
  
