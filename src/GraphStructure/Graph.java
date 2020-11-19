@@ -7,7 +7,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 public class Graph {
-	
+
 	private String name;
 	private boolean directed;
 	private int verticesNb;
@@ -17,7 +17,7 @@ public class Graph {
 	private ListVertices listVertices;
 	private ListEdges listEdges;
 	private List<LinkedList<Edge>> listAdjacent;
-	
+
 	public Graph(String name, boolean directed, int verticesNb, int verticesValuesNb, int edgesNb, int edgesValuesNb) {
 		this.name = name;
 		this.directed = directed;
@@ -27,17 +27,17 @@ public class Graph {
 		this.edgesValuesNb = edgesValuesNb;
 		this.listVertices = new ListVertices();
 		this.listEdges = new ListEdges();
-		this.listAdjacent  = new ArrayList<LinkedList<Edge>>();
+		this.listAdjacent = new ArrayList<LinkedList<Edge>>();
 	}
 
 	public String getName() {
 		return name;
 	}
-	
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	
+
 	public boolean isDirected() {
 		return directed;
 	}
@@ -53,7 +53,7 @@ public class Graph {
 	public void setVerticesNb(int verticesNb) {
 		this.verticesNb = verticesNb;
 	}
-	
+
 	public int getVerticesValuesNb() {
 		return verticesValuesNb;
 	}
@@ -77,7 +77,7 @@ public class Graph {
 	public void setEdgesValuesNb(int edgesValuesNb) {
 		this.edgesValuesNb = edgesValuesNb;
 	}
-	
+
 	public Vertex getVertex(int i) {
 		return listVertices.get(i);
 	}
@@ -85,7 +85,7 @@ public class Graph {
 	public void addVertex(Vertex vertex) {
 		if (!listVertices.contains(vertex)) {
 			this.listVertices.add(vertex);
-			
+
 			this.listAdjacent.add(vertex.getId(), new LinkedList<Edge>());
 		}
 	}
@@ -97,20 +97,20 @@ public class Graph {
 	public void addEdge(Edge edge) {
 		if (!listEdges.contains(edge)) {
 			this.listEdges.add(edge);
-			
+
 			int idInitial = edge.getIndexInitialVertex();
 			int idFinal = edge.getIndexFinalVertex();
-			
+
 			LinkedList<Edge> successorsA = listAdjacent.get(idInitial);
-			
-			if(!successorsA.contains(edge)) {
+
+			if (!successorsA.contains(edge)) {
 				successorsA.add(edge);
 			}
-			
-			if(!this.directed) {
+
+			if (!this.directed) {
 				LinkedList<Edge> successorsB = listAdjacent.get(idFinal);
 				Edge opposite = edge.opposite();
-				if(!successorsB.contains(opposite)) {
+				if (!successorsB.contains(opposite)) {
 					successorsB.add(opposite);
 				}
 			}
@@ -124,22 +124,19 @@ public class Graph {
 	public void setListAdjacent(int i, LinkedList<Edge> listAdjacent) {
 		this.listAdjacent.set(i, listAdjacent);
 	}
-	
+
 	public ListVertices getListVertices() {
 		return this.listVertices;
 	}
-	
+
 	public List<Vertex> getNeighbors(Vertex vertex) {
 		LinkedList<Edge> list = listAdjacent.get(vertex.getId());
-			
-		return list.stream()
-				.map(Edge::getIndexFinalVertex)
-				.map(this::getVertex)
-				.collect(toList());
+
+		return list.stream().map(Edge::getIndexFinalVertex).map(this::getVertex).collect(toList());
 	}
-	
+
 	public void printListAdjacent() {
-		for(int i = 0; i < this.listAdjacent.size(); i++) {
+		for (int i = 0; i < this.listAdjacent.size(); i++) {
 			System.out.print("Les successeurs du sommet n°" + i + " : [ ");
 			for (int j = 0; j < this.listAdjacent.get(i).size(); j++) {
 				System.out.print(this.listAdjacent.get(i).get(j) + " ");
@@ -147,48 +144,107 @@ public class Graph {
 			System.out.println("]");
 		}
 	}
-	
+
 	public void dijkstra(Vertex s) {
 		ListVertices z = (ListVertices) this.listVertices.clone();
 		z.remove(s);
 		double[] dist = new double[this.verticesNb];
-		
+
 		// Initialisation
 		Arrays.fill(dist, Double.MAX_VALUE);
 		dist[s.getId()] = 0;
-		for(Edge e : this.listAdjacent.get(s.getId())) {
+		for (Edge e : this.listAdjacent.get(s.getId())) {
 			dist[e.getIndexFinalVertex()] = e.getValue(0);
 		}
-		
-		while(!z.isEmpty()) {
+
+		while (!z.isEmpty()) {
 			double distMin = Double.MAX_VALUE;
 			int idMin = -1;
-			
-			for(int i = 0; i < dist.length; i++) {
-				if(z.contains(getVertex(i)) && dist[i] < distMin) {
+
+			for (int i = 0; i < dist.length; i++) {
+				if (z.contains(getVertex(i)) && dist[i] < distMin) {
 					idMin = i;
 					distMin = dist[i];
 				}
 			}
-			
-			if(idMin == -1) {
+
+			if (idMin == -1) {
 				break;
 			}
-			
+
 			Vertex x = getVertex(idMin);
 			z.remove(x);
-			
-			for(Edge e : this.listAdjacent.get(x.getId())) {
+
+			for (Edge e : this.listAdjacent.get(x.getId())) {
 				int i = e.getIndexFinalVertex();
 				if (z.contains(getVertex(i))) {
-					if(dist[x.getId()] + e.getValue(0) < dist[i]) {
+					if (dist[x.getId()] + e.getValue(0) < dist[i]) {
 						dist[i] = dist[x.getId()] + e.getValue(0);
 					}
 				}
 			}
 		}
 		System.out.println(Arrays.toString(dist));
-		System.out.println("Distance Paris-Lyon : " + dist[1266]);
+	}
+
+	public void aEtoile(Vertex s, Vertex d) {
+		ListVertices z = (ListVertices) this.listVertices.clone();
+		z.remove(s);
+		double[] dist = new double[this.verticesNb];
+		double[] heuristic = new double[this.verticesNb];
+
+		// Initialisation
+		Arrays.fill(dist, Double.MAX_VALUE);
+		dist[s.getId()] = 0;
+		for (Edge e : this.listAdjacent.get(s.getId())) {
+			dist[e.getIndexFinalVertex()] = e.getValue(0);
+		}
+
+		// Initialisation de l'heuristique
+		for (int i = 0; i < verticesNb; i++) {
+			heuristic[i] = calcDist(getVertex(i), d);
+		}
+
+		while (!z.isEmpty()) {
+			double distMin = Double.MAX_VALUE;
+			int idMin = -1;
+
+			for (int i = 0; i < dist.length; i++) {
+				if (z.contains(getVertex(i)) && dist[i] + heuristic[i] < distMin) {
+					idMin = i;
+					distMin = dist[i];
+				}
+			}
+
+			if (idMin == -1) {
+				break;
+			}
+
+			Vertex x = getVertex(idMin);
+			z.remove(x);
+
+			for (Edge e : this.listAdjacent.get(x.getId())) {
+				int i = e.getIndexFinalVertex();
+				if (z.contains(getVertex(i))) {
+					if (dist[x.getId()] + e.getValue(0) < dist[i]) {
+						dist[i] = dist[x.getId()] + e.getValue(0);
+					}
+				}
+			}
+		}
+		System.out.println(Arrays.toString(dist));
+	}
+
+	public static double calcDist(Vertex a, Vertex b) {
+		double latA = Math.toRadians(a.getLat());
+		double latB = Math.toRadians(b.getLat());
+		double deltaLng = Math.toRadians(b.getLng() - a.getLng());
+		
+		System.out.println("Latitude a = " + latA + " Latitude b = " + latB);
+		System.out.println("Delta lng = " + deltaLng);
+		double rayonTerre = 6378.137;
+		
+		return rayonTerre
+				* Math.acos(Math.sin(latA) * Math.sin(latB) + Math.cos(latA) * Math.cos(latB) * Math.cos(deltaLng));
 	}
 }
- 

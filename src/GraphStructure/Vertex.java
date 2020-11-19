@@ -10,6 +10,8 @@ public class Vertex {
 	private int color;
 	private final int valuesNb;
 	private double[] values;
+	private double lat;
+	private double lng;
 		
 	public Vertex(int id, String name, int valuesNb) {
 		this.id = id;
@@ -72,6 +74,22 @@ public class Vertex {
 	
 	public void setValue(int i, double value) {
 		this.values[i] = value;
+	}
+
+	public double getLat() {
+		return lat;
+	}
+
+	public void setLat(double lat) {
+		this.lat = lat;
+	}
+
+	public double getLng() {
+		return lng;
+	}
+
+	public void setLng(double lng) {
+		this.lng = lng;
 	}
 	
 }
