@@ -2,8 +2,14 @@ package GraphStructure;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+
+import ToolBox.FibonacciHeap;
+import ToolBox.FibonacciHeap.Entry;
+
 import static java.util.stream.Collectors.toList;
 
 public class Graph {
@@ -148,7 +154,7 @@ public class Graph {
 		}
 	}
 
-	public void dijkstra(Vertex s) {
+	public double[] dijkstra(Vertex s) {
 		ListVertices z = (ListVertices) this.listVertices.clone();
 		z.remove(s);
 		double[] dist = new double[this.verticesNb];
@@ -187,10 +193,10 @@ public class Graph {
 				}
 			}
 		}
-		System.out.println(Arrays.toString(dist));
+		return dist;
 	}
 
-	public void aEtoile(Vertex s, Vertex d) {
+	public double[] aEtoile(Vertex s, Vertex d) {
 		ListVertices z = (ListVertices) this.listVertices.clone();
 		z.remove(s);
 		double[] dist = new double[this.verticesNb];
@@ -235,7 +241,7 @@ public class Graph {
 				}
 			}
 		}
-		System.out.println(Arrays.toString(dist));
+		return dist;
 	}
 
 	public static double calcDist(Vertex a, Vertex b) {
@@ -250,4 +256,49 @@ public class Graph {
 		return rayonTerre
 				* Math.acos(Math.sin(latA) * Math.sin(latB) + Math.cos(latA) * Math.cos(latB) * Math.cos(deltaLng));
 	}
+	
+	public double[] dijkstraFibonacci(Vertex s) {
+		double[] dist = new double[this.verticesNb];
+		
+		FibonacciHeap<Vertex> z = new FibonacciHeap<Vertex>();
+		Map<Integer, Entry<Vertex>> vertexEntries = new HashMap<Integer, Entry<Vertex>>();
+		for (Vertex vertex : listVertices) {
+			if (vertex != s) {
+				Entry<Vertex> entry = z.enqueue(vertex, Double.MAX_VALUE);
+				vertexEntries.put(vertex.getId(), entry);
+			}
+		}
+		
+		// Initialisation
+		Arrays.fill(dist, Double.MAX_VALUE);
+		dist[s.getId()] = 0;
+		
+		for (Edge e : this.listAdjacent.get(s.getId())) {
+			int vertexId = e.getIndexFinalVertex();
+			dist[vertexId] = e.getValue(0);
+			
+			Entry<Vertex> entry = vertexEntries.get(vertexId);
+			z.decreaseKey(entry, e.getValue(0));
+		}
+
+		while (!z.isEmpty()) {
+			int vertexId = z.dequeueMin().getValue().getId();
+			vertexEntries.remove(vertexId);
+
+			for (Edge e : this.listAdjacent.get(vertexId)) {
+				int i = e.getIndexFinalVertex();
+				Entry<Vertex> entry = vertexEntries.get(i);
+				
+				if (entry != null) {
+					double newValue = dist[vertexId] + e.getValue(0);
+					if (newValue < dist[i]) {
+						dist[i] = newValue;
+						z.decreaseKey(entry, newValue);
+					}
+				}
+			}
+		}
+		return dist;
+	}
+	
 }
