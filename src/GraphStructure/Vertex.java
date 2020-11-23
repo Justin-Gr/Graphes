@@ -20,6 +20,12 @@ public class Vertex {
 		this.values = new double[valuesNb];
 	}
 	
+	public Vertex(int id, String name, int valuesNb, double lat, double lng) {
+		this(id, name, valuesNb);
+		this.lat = lat;
+		this.lng = lng;
+	}
+	
 	public int getId() {
 		return id;
 	}
@@ -90,6 +96,10 @@ public class Vertex {
 
 	public void setLng(double lng) {
 		this.lng = lng;
+	}
+	
+	public String toString() {
+		return "id : " + id + " name : " + name + " lat : " + lat + " lng : " + lng;
 	}
 	
 }

@@ -87,6 +87,7 @@ public class Graph {
 			this.listVertices.add(vertex);
 
 			this.listAdjacent.add(vertex.getId(), new LinkedList<Edge>());
+			this.verticesNb++;
 		}
 	}
 
@@ -96,6 +97,7 @@ public class Graph {
 
 	public void addEdge(Edge edge) {
 		if (!listEdges.contains(edge)) {
+			this.edgesNb++;
 			this.listEdges.add(edge);
 
 			int idInitial = edge.getIndexInitialVertex();
@@ -112,6 +114,7 @@ public class Graph {
 				Edge opposite = edge.opposite();
 				if (!successorsB.contains(opposite)) {
 					successorsB.add(opposite);
+					this.edgesNb++;
 				}
 			}
 		}
@@ -240,8 +243,8 @@ public class Graph {
 		double latB = Math.toRadians(b.getLat());
 		double deltaLng = Math.toRadians(b.getLng() - a.getLng());
 		
-		System.out.println("Latitude a = " + latA + " Latitude b = " + latB);
-		System.out.println("Delta lng = " + deltaLng);
+		// System.out.println("Latitude a = " + latA + " Latitude b = " + latB);
+		// System.out.println("Delta lng = " + deltaLng);
 		double rayonTerre = 6378.137;
 		
 		return rayonTerre
