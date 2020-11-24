@@ -36,7 +36,7 @@ public abstract class GSB_Loader {
 
 		scanner.nextLine();
 
-		Graph g = new Graph(graphName, directed, verticesNb, verticesValueNb, edgesNb, edgesValueNb);
+		Graph g = new Graph(graphName, directed, 0, verticesValueNb, 0, edgesValueNb);
 
 		String line;
 
