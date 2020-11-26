@@ -96,7 +96,7 @@ public abstract class GSB_Loader {
 				Cell cell = row.getCell(3);
 				if (cell.getNumericCellValue() >= popLimit) {
 					Vertex v = new Vertex(id++, row.getCell(1).getStringCellValue(), 0, row.getCell(5).getNumericCellValue(), row.getCell(4).getNumericCellValue());
-					System.out.println(v);
+					// System.out.println(v);
 					g.addVertex(v);
 				}
 			}
@@ -113,7 +113,7 @@ public abstract class GSB_Loader {
 					if(dist < distLimit) {
 						Edge e = new Edge(idEdge++, a.getId(), b.getId(), 1);
 						e.setValue(0, dist);
-						System.out.println(e);
+						// System.out.println(e);
 						g.addEdge(e);
 					}
 				}
