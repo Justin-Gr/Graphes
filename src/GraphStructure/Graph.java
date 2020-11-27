@@ -264,7 +264,7 @@ public class Graph {
 		Map<Integer, Entry<Vertex>> vertexEntries = new HashMap<Integer, Entry<Vertex>>();
 		for (Vertex vertex : listVertices) {
 			if (vertex != s) {
-				Entry<Vertex> entry = z.enqueue(vertex, Double.MAX_VALUE);
+				Entry<Vertex> entry = z.enqueue(vertex, Double.MAX_VALUE); // ne pas tout mettre, juste les vertex pas infinis
 				vertexEntries.put(vertex.getId(), entry);
 			}
 		}
@@ -277,23 +277,26 @@ public class Graph {
 			int vertexId = e.getIndexFinalVertex();
 			dist[vertexId] = e.getValue(0);
 			
-			Entry<Vertex> entry = vertexEntries.get(vertexId);
-			z.decreaseKey(entry, e.getValue(0));
+			Entry<Vertex> entry = vertexEntries.get(vertexId); // nope
+			z.decreaseKey(entry, e.getValue(0)); // nope
 		}
 
-		while (!z.isEmpty()) {
+		while (!z.isEmpty()) { // un compteur ?
 			int vertexId = z.dequeueMin().getValue().getId();
 			vertexEntries.remove(vertexId);
 
 			for (Edge e : this.listAdjacent.get(vertexId)) {
 				int i = e.getIndexFinalVertex();
-				Entry<Vertex> entry = vertexEntries.get(i);
+				Entry<Vertex> entry = vertexEntries.get(i); // nope
 				
-				if (entry != null) {
+				if (entry != null) { // regarder si marque[i] == false
+					// marque[i] = true
 					double newValue = dist[vertexId] + e.getValue(0);
 					if (newValue < dist[i]) {
+						// si dist[i] == infini on z.enqueue(vertex, newValue) et on push bien la nouvelle entrée dans la hashmap
+						// sinon on recup l'entree associée au vertex et on z.decreaseKey(entry, newValue)
 						dist[i] = newValue;
-						z.decreaseKey(entry, newValue);
+						z.decreaseKey(entry, newValue); // nope
 					}
 				}
 			}
