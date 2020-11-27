@@ -75,7 +75,7 @@ public abstract class Algorithmes {
 	public static void VRP1(Graph g, int n) {
 		int nbCommunes = g.getVerticesNb();
 		
-		// Cherche les villes de plus de n habitants
+		// on cherche les villes de plus de n habitants
 		List<Vertex> villes = new ArrayList<Vertex>();
 		for (int i = 0; i < nbCommunes; i++) {
 			Vertex v = g.getVertex(i);
@@ -87,7 +87,7 @@ public abstract class Algorithmes {
 		// on applique dijkstra pour chaque ville et on stocke les tableaux des distances obtenus
 		List<double[]> distancesVilles = new ArrayList<double[]>();
 		for (Vertex ville : villes) {
-			double[] distances = g.dijkstra(ville);
+			double[] distances = g.dijkstraFibonacci(ville);
 			distancesVilles.add(distances);
 		}
 		
@@ -95,21 +95,29 @@ public abstract class Algorithmes {
 		double[] moyennes = new double[nbCommunes];
 		for (double[] distancesVille : distancesVilles) {
 			for (int i = 0; i < nbCommunes; i++) {
-				moyennes[i] += distancesVille[i] / distancesVilles.size();
+				if (distancesVille[i] < Double.MAX_VALUE) {
+					moyennes[i] += distancesVille[i] / distancesVilles.size();
+				} else {
+					moyennes[i] = Double.MAX_VALUE;
+				}
 			}
 		}
 		
 		// on cherche la commune dont la distance moyenne à chaque ville est minimale
-		int indexMin = 0;
-		double moyenneMin = moyennes[0];
-		for (int i = 1; i < nbCommunes; i++) {
-			if (moyennes[i] < moyenneMin) {
+		int indexMin = -1;
+		double moyenneMin = Double.MAX_VALUE;
+		for (int i = 0; i < nbCommunes; i++) {
+			if (moyennes[i] < moyenneMin && moyennes[i] != Double.MAX_VALUE) {
 				indexMin = i;
 				moyenneMin = moyennes[i];
 			}
 		}
 		
-		System.out.println("La ville n°" + indexMin + " a la plus petite moyenne des distances de : " + moyenneMin + "km");
+		if (moyenneMin != Double.MAX_VALUE) {
+			System.out.println(g.getVertex(indexMin).getName() + " a la plus petite moyenne des distances de : " + (int) moyenneMin + "km");
+		} else {
+			System.out.println("Le graphe n'est pas suffisamment connexe pour permettre l'accès à toutes les grandes villes");
+		}
 	}
 	
 	public static void VRP2(Graph g, int n) {

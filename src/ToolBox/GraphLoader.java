@@ -12,7 +12,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import GraphStructure.*;
 
-public abstract class GSB_Loader {
+public abstract class GraphLoader {
 	public static Graph loadFile(String filename) throws FileNotFoundException {
 		String graphName;
 		boolean directed;
