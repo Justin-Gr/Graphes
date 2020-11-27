@@ -95,7 +95,7 @@ public abstract class GSB_Loader {
 				Row row = itr.next();
 				Cell cell = row.getCell(3);
 				if (cell.getNumericCellValue() >= popLimit) {
-					Vertex v = new Vertex(id++, row.getCell(1).getStringCellValue(), 0, row.getCell(5).getNumericCellValue(), row.getCell(4).getNumericCellValue());
+					Vertex v = new Vertex(id++, row.getCell(1).getStringCellValue(), row.getCell(3).getNumericCellValue(), row.getCell(4).getNumericCellValue(), row.getCell(5).getNumericCellValue());
 					// System.out.println(v);
 					g.addVertex(v);
 				}

@@ -251,9 +251,9 @@ public class Graph {
 	}
 
 	public static double calcDist(Vertex a, Vertex b) {
-		double latA = Math.toRadians(a.getLat());
-		double latB = Math.toRadians(b.getLat());
-		double deltaLng = Math.toRadians(b.getLng() - a.getLng());
+		double latA = Math.toRadians(a.getValue(2));
+		double latB = Math.toRadians(b.getValue(2));
+		double deltaLng = Math.toRadians(b.getValue(1) - a.getValue(1));
 		
 		// System.out.println("Latitude a = " + latA + " Latitude b = " + latB);
 		// System.out.println("Delta lng = " + deltaLng);

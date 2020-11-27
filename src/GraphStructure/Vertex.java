@@ -10,9 +10,7 @@ public class Vertex {
 	private int color;
 	private final int valuesNb;
 	private double[] values;
-	private double lat;
-	private double lng;
-		
+	
 	public Vertex(int id, String name, int valuesNb) {
 		this.id = id;
 		this.name = name;
@@ -20,10 +18,11 @@ public class Vertex {
 		this.values = new double[valuesNb];
 	}
 	
-	public Vertex(int id, String name, int valuesNb, double lat, double lng) {
-		this(id, name, valuesNb);
-		this.lat = lat;
-		this.lng = lng;
+	public Vertex(int id, String name, double lat, double lng, double population) {
+		this(id, name, 3);
+		this.values[0] = population;
+		this.values[1] = lng;
+		this.values[2] = lat;
 	}
 	
 	public int getId() {
@@ -81,25 +80,9 @@ public class Vertex {
 	public void setValue(int i, double value) {
 		this.values[i] = value;
 	}
-
-	public double getLat() {
-		return lat;
-	}
-
-	public void setLat(double lat) {
-		this.lat = lat;
-	}
-
-	public double getLng() {
-		return lng;
-	}
-
-	public void setLng(double lng) {
-		this.lng = lng;
-	}
 	
 	public String toString() {
-		return "id : " + id + " name : " + name + " lat : " + lat + " lng : " + lng;
+		return "id : " + id + " name : " + name + " lng : " + getValue(1) + " lat : " + getValue(2);
 	}
 	
 }
