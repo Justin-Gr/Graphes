@@ -102,26 +102,24 @@ public class Graph {
 	}
 
 	public void addEdge(Edge edge) {
-		if (!listEdges.contains(edge)) {
-			this.edgesNb++;
-			this.listEdges.add(edge);
+		this.edgesNb++;
+		this.listEdges.add(edge);
 
-			int idInitial = edge.getIndexInitialVertex();
-			int idFinal = edge.getIndexFinalVertex();
+		int idInitial = edge.getIndexInitialVertex();
+		int idFinal = edge.getIndexFinalVertex();
 
-			LinkedList<Edge> successorsA = listAdjacent.get(idInitial);
+		LinkedList<Edge> successorsA = listAdjacent.get(idInitial);
 
-			if (!successorsA.contains(edge)) {
-				successorsA.add(edge);
-			}
+		if (!successorsA.contains(edge)) {
+			successorsA.add(edge);
+		}
 
-			if (!this.directed) {
-				LinkedList<Edge> successorsB = listAdjacent.get(idFinal);
-				Edge opposite = edge.opposite();
-				if (!successorsB.contains(opposite)) {
-					successorsB.add(opposite);
-					this.edgesNb++;
-				}
+		if (!this.directed) {
+			LinkedList<Edge> successorsB = listAdjacent.get(idFinal);
+			Edge opposite = edge.opposite();
+			if (!successorsB.contains(opposite)) {
+				successorsB.add(opposite);
+				this.edgesNb++;
 			}
 		}
 	}
@@ -155,8 +153,11 @@ public class Graph {
 	}
 
 	public double[] dijkstra(Vertex s) {
-		ListVertices z = (ListVertices) this.listVertices.clone();
-		z.remove(s);
+		boolean[] marque = new boolean[this.verticesNb];
+		int nbSommetTraite = 0;
+
+		marque[s.getId()] = true;
+		nbSommetTraite++;
 		double[] dist = new double[this.verticesNb];
 
 		// Initialisation
@@ -166,12 +167,12 @@ public class Graph {
 			dist[e.getIndexFinalVertex()] = e.getValue(0);
 		}
 
-		while (!z.isEmpty()) {
+		while (nbSommetTraite != this.verticesNb) {
 			double distMin = Double.MAX_VALUE;
 			int idMin = -1;
 
 			for (int i = 0; i < dist.length; i++) {
-				if (z.contains(getVertex(i)) && dist[i] < distMin) {
+				if (!marque[i] && dist[i] < distMin) {
 					idMin = i;
 					distMin = dist[i];
 				}
@@ -182,11 +183,12 @@ public class Graph {
 			}
 
 			Vertex x = getVertex(idMin);
-			z.remove(x);
+			marque[idMin] = true;
+			nbSommetTraite++;
 
 			for (Edge e : this.listAdjacent.get(x.getId())) {
 				int i = e.getIndexFinalVertex();
-				if (z.contains(getVertex(i))) {
+				if (!marque[i]) {
 					if (dist[x.getId()] + e.getValue(0) < dist[i]) {
 						dist[i] = dist[x.getId()] + e.getValue(0);
 					}
@@ -197,8 +199,11 @@ public class Graph {
 	}
 
 	public double[] aEtoile(Vertex s, Vertex d) {
-		ListVertices z = (ListVertices) this.listVertices.clone();
-		z.remove(s);
+		boolean[] marque = new boolean[this.verticesNb];
+		int nbSommetTraite = 0;
+		
+		marque[s.getId()] = true;
+		nbSommetTraite++;
 		double[] dist = new double[this.verticesNb];
 		double[] heuristic = new double[this.verticesNb];
 
@@ -214,12 +219,12 @@ public class Graph {
 			heuristic[i] = calcDist(getVertex(i), d);
 		}
 
-		while (!z.isEmpty()) {
+		while (nbSommetTraite != this.verticesNb) {
 			double distMin = Double.MAX_VALUE;
 			int idMin = -1;
 
 			for (int i = 0; i < dist.length; i++) {
-				if (z.contains(getVertex(i)) && dist[i] + heuristic[i] < distMin) {
+				if (!marque[i] && dist[i] + heuristic[i] < distMin) {
 					idMin = i;
 					distMin = dist[i];
 				}
@@ -230,11 +235,12 @@ public class Graph {
 			}
 
 			Vertex x = getVertex(idMin);
-			z.remove(x);
+			marque[idMin] = true;
+			nbSommetTraite++;
 
 			for (Edge e : this.listAdjacent.get(x.getId())) {
 				int i = e.getIndexFinalVertex();
-				if (z.contains(getVertex(i))) {
+				if (!marque[i]) {
 					if (dist[x.getId()] + e.getValue(0) < dist[i]) {
 						dist[i] = dist[x.getId()] + e.getValue(0);
 					}
@@ -245,9 +251,9 @@ public class Graph {
 	}
 
 	public static double calcDist(Vertex a, Vertex b) {
-		double latA = Math.toRadians(a.getLat());
-		double latB = Math.toRadians(b.getLat());
-		double deltaLng = Math.toRadians(b.getLng() - a.getLng());
+		double latA = Math.toRadians(a.getValue(2));
+		double latB = Math.toRadians(b.getValue(2));
+		double deltaLng = Math.toRadians(b.getValue(1) - a.getValue(1));
 		
 		// System.out.println("Latitude a = " + latA + " Latitude b = " + latB);
 		// System.out.println("Delta lng = " + deltaLng);
