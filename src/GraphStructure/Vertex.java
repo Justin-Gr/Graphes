@@ -18,7 +18,7 @@ public class Vertex {
 		this.values = new double[valuesNb];
 	}
 	
-	public Vertex(int id, String name, double lat, double lng, double population) {
+	public Vertex(int id, String name, double population, double lng, double lat) {
 		this(id, name, 3);
 		this.values[0] = population;
 		this.values[1] = lng;
@@ -82,7 +82,7 @@ public class Vertex {
 	}
 	
 	public String toString() {
-		return "id : " + id + " name : " + name + " lng : " + getValue(1) + " lat : " + getValue(2);
+		return "id : " + id + " name : " + name + " pop : " + getValue(0) + " lng : " + getValue(1) + " lat : " + getValue(2);
 	}
 	
 }
