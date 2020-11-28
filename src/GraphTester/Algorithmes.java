@@ -79,58 +79,15 @@ public abstract class Algorithmes {
 	}
 	
 	public static double[] dijkstra(Graph g, int s) {
-		
-//		boolean[] marque = new boolean[this.verticesNb];
-//		int nbSommetTraite = 0;
-//
-//		marque[s.getId()] = true;
-//		nbSommetTraite++;
-//		double[] dist = new double[this.verticesNb];
-//
-//		// Initialisation
-//		Arrays.fill(dist, Double.MAX_VALUE);
-//		dist[s.getId()] = 0;
-//		for (Edge e : this.listAdjacent.get(s.getId())) {
-//			dist[e.getIndexFinalVertex()] = e.getValue(0);
-//		}
-//
-//		while (nbSommetTraite != this.verticesNb) {
-//			double distMin = Double.MAX_VALUE;
-//			int idMin = -1;
-//
-//			for (int i = 0; i < dist.length; i++) {
-//				if (!marque[i] && dist[i] < distMin) {
-//					idMin = i;
-//					distMin = dist[i];
-//				}
-//			}
-//
-//			if (idMin == -1) {
-//				break;
-//			}
-//
-//			Vertex x = getVertex(idMin);
-//			marque[idMin] = true;
-//			nbSommetTraite++;
-//
-//			for (Edge e : this.listAdjacent.get(x.getId())) {
-//				int i = e.getIndexFinalVertex();
-//				if (!marque[i]) {
-//					if (dist[x.getId()] + e.getValue(0) < dist[i]) {
-//						dist[i] = dist[x.getId()] + e.getValue(0);
-//					}
-//				}
-//			}
-//		}
-//		return dist;
-		
 		int verticesNb = g.getVerticesNb();
 		
-		boolean[] marque = new boolean[verticesNb];
-		int nbSommetTraite = 0;
-
-		marque[s] = true;
-		nbSommetTraite++;
+		Map<Integer, Vertex> z = new HashMap<Integer, Vertex>();
+		for (Vertex v : g.getListVertices()) {
+			if (v.getId() != s) {
+				z.put(v.getId(), v);
+			}
+		}
+		
 		double[] dist = new double[verticesNb];
 
 		// Initialisation
@@ -140,12 +97,12 @@ public abstract class Algorithmes {
 			dist[e.getIndexFinalVertex()] = e.getValue(0);
 		}
 
-		while (nbSommetTraite != verticesNb) {
+		while (!z.isEmpty()) { // temps constant ? à vérifier
 			double distMin = Double.MAX_VALUE;
 			int idMin = -1;
 
 			for (int i = 0; i < dist.length; i++) {
-				if (!marque[i] && dist[i] < distMin) {
+				if (z.containsKey(i) && dist[i] < distMin) { // temps constant
 					idMin = i;
 					distMin = dist[i];
 				}
@@ -156,29 +113,30 @@ public abstract class Algorithmes {
 			}
 
 			Vertex x = g.getVertex(idMin);
-			marque[idMin] = true;
-			nbSommetTraite++;
+			z.remove(idMin); // temps constant
 
 			for (Edge e : g.getListAdjacent(x.getId())) {
-				int siblingId = e.getIndexFinalVertex();
-				if (!marque[siblingId]) {
-					if (dist[x.getId()] + e.getValue(0) < dist[siblingId]) {
-						dist[siblingId] = dist[x.getId()] + e.getValue(0);
+				int neighborId = e.getIndexFinalVertex();
+				if (z.containsKey(neighborId)) { // temps constant
+					if (dist[x.getId()] + e.getValue(0) < dist[neighborId]) {
+						dist[neighborId] = dist[x.getId()] + e.getValue(0);
 					}
 				}
 			}
-		}
+		}		
 		return dist;
 	}
 
 	public static double[] aEtoile(Graph g, int s, int d) {
 		int verticesNb = g.getVerticesNb();
 		
-		boolean[] marque = new boolean[verticesNb];
-		int nbSommetTraite = 0;
+		Map<Integer, Vertex> z = new HashMap<Integer, Vertex>();
+		for (Vertex v : g.getListVertices()) {
+			if (v.getId() != s) {
+				z.put(v.getId(), v);
+			}
+		}
 		
-		marque[s] = true;
-		nbSommetTraite++;
 		double[] dist = new double[verticesNb];
 		double[] heuristic = new double[verticesNb];
 
@@ -194,12 +152,12 @@ public abstract class Algorithmes {
 			heuristic[i] = Graph.calcDist(g.getVertex(i), g.getVertex(d));
 		}
 
-		while (nbSommetTraite != verticesNb) {
+		while (!z.isEmpty()) {
 			double distMin = Double.MAX_VALUE;
 			int idMin = -1;
 
 			for (int i = 0; i < dist.length; i++) {
-				if (!marque[i] && dist[i] + heuristic[i] < distMin) {
+				if (z.containsKey(i) && dist[i] + heuristic[i] < distMin) {
 					idMin = i;
 					distMin = dist[i];
 				}
@@ -210,14 +168,13 @@ public abstract class Algorithmes {
 			}
 
 			Vertex x = g.getVertex(idMin);
-			marque[idMin] = true;
-			nbSommetTraite++;
+			z.remove(idMin);
 
 			for (Edge e : g.getListAdjacent(x.getId())) {
-				int i = e.getIndexFinalVertex();
-				if (!marque[i]) {
-					if (dist[x.getId()] + e.getValue(0) < dist[i]) {
-						dist[i] = dist[x.getId()] + e.getValue(0);
+				int neighborId = e.getIndexFinalVertex();
+				if (z.containsKey(neighborId)) {
+					if (dist[x.getId()] + e.getValue(0) < dist[neighborId]) {
+						dist[neighborId] = dist[x.getId()] + e.getValue(0);
 					}
 				}
 			}
@@ -233,8 +190,7 @@ public abstract class Algorithmes {
 		
 		FibonacciHeap<Vertex> fiboHeap = new FibonacciHeap<Vertex>();
 		Map<Integer, Entry<Vertex>> vertexEntries = new HashMap<Integer, Entry<Vertex>>();
-		
-		
+				
 		// Initialisation
 		Arrays.fill(dist, Double.MAX_VALUE);
 		dist[s] = 0;
@@ -255,26 +211,25 @@ public abstract class Algorithmes {
 			marque[vertexId] = true;
 			
 			for (Edge e : g.getListAdjacent(vertexId)) {
-				int siblingId = e.getIndexFinalVertex();
+				int neighborId = e.getIndexFinalVertex();
 				
-				if (marque[siblingId] == false) {					
+				if (marque[neighborId] == false) {					
 					double newValue = dist[vertexId] + e.getValue(0);
-					if (newValue < dist[siblingId]) {
+					if (newValue < dist[neighborId]) {
 
-						if (dist[siblingId] < Double.MAX_VALUE) {
-							Entry<Vertex> entry = vertexEntries.get(siblingId);
+						if (dist[neighborId] < Double.MAX_VALUE) {
+							Entry<Vertex> entry = vertexEntries.get(neighborId);
 							fiboHeap.decreaseKey(entry, newValue);
 						} else {
-							Entry<Vertex> entry = fiboHeap.enqueue(g.getVertex(siblingId), newValue);
-							vertexEntries.put(siblingId, entry);
+							Entry<Vertex> entry = fiboHeap.enqueue(g.getVertex(neighborId), newValue);
+							vertexEntries.put(neighborId, entry);
 						}
 						
-						dist[siblingId] = newValue;
+						dist[neighborId] = newValue;
 					}
 				}
 			}
 		}
-		
 		return dist;
 	}
 	

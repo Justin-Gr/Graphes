@@ -79,7 +79,6 @@ public abstract class GraphLoader {
 		return g;
 	}
 
-	@SuppressWarnings("deprecation")
 	public static Graph loadXLSX(String filename, double popLimit, double distLimit) {
 		Graph g = new Graph("Carte", false, 0, 0, 0, 1);
 		try {
@@ -118,7 +117,7 @@ public abstract class GraphLoader {
 					}
 				}
 			}
-			
+			wb.close();
 
 		} catch (Exception e) {
 			e.printStackTrace();
