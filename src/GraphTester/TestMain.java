@@ -1,5 +1,8 @@
 package GraphTester;
 import ToolBox.GraphLoader;
+
+import java.util.Arrays;
+
 import GraphStructure.Graph;
 
 public class TestMain {
@@ -17,20 +20,20 @@ public class TestMain {
 			endTime = System.nanoTime();
 			
 			System.out.println("Graphe généré avec succès, durée : " + (endTime-startTime)/1e9 + "s");
-//			
+			
 //			startTime = System.nanoTime();
-//			double[] dist1 = g.aEtoile(g.getVertex(0), g.getVertex(1));
+//			double[] dist1 = Algorithmes.dijkstra(g, 0);
 //			endTime = System.nanoTime();
-//			
-//			// System.out.println(Arrays.toString(dist1));
+			
+//			System.out.println(Arrays.toString(dist1));
 //			System.out.println("Distance des premiers noeuds: " + dist1[1] + " km");
 //			System.out.println("Fin de Dijkstra, durée : " + (endTime-startTime)/1e9 + "s");
-//			
+			
 //			startTime = System.nanoTime();
-//			double[] dist2 = g.dijkstra(g.getVertex(0));
+//			double[] dist2 = Algorithmes.dijkstraFibonacci(g, 0);
 //			endTime = System.nanoTime();
-//
-//			// System.out.println(Arrays.toString(dist2));
+
+//			System.out.println(Arrays.toString(dist2));
 //			System.out.println("Distance des premiers noeuds : " + dist2[1] + " km");
 //			System.out.println("Fin de Dijkstra amélioré, durée : " + (endTime-startTime)/1e9 + "s");
 //			

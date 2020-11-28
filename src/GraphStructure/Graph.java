@@ -1,14 +1,8 @@
 package GraphStructure;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-
-import ToolBox.FibonacciHeap;
-import ToolBox.FibonacciHeap.Entry;
 
 import static java.util.stream.Collectors.toList;
 
@@ -125,7 +119,7 @@ public class Graph {
 	}
 
 	public LinkedList<Edge> getListAdjacent(int i) {
-		return listAdjacent.get(i);
+		return this.listAdjacent.get(i);
 	}
 
 	public void setListAdjacent(int i, LinkedList<Edge> listAdjacent) {
@@ -152,104 +146,6 @@ public class Graph {
 		}
 	}
 
-	public double[] dijkstra(Vertex s) {
-		boolean[] marque = new boolean[this.verticesNb];
-		int nbSommetTraite = 0;
-
-		marque[s.getId()] = true;
-		nbSommetTraite++;
-		double[] dist = new double[this.verticesNb];
-
-		// Initialisation
-		Arrays.fill(dist, Double.MAX_VALUE);
-		dist[s.getId()] = 0;
-		for (Edge e : this.listAdjacent.get(s.getId())) {
-			dist[e.getIndexFinalVertex()] = e.getValue(0);
-		}
-
-		while (nbSommetTraite != this.verticesNb) {
-			double distMin = Double.MAX_VALUE;
-			int idMin = -1;
-
-			for (int i = 0; i < dist.length; i++) {
-				if (!marque[i] && dist[i] < distMin) {
-					idMin = i;
-					distMin = dist[i];
-				}
-			}
-
-			if (idMin == -1) {
-				break;
-			}
-
-			Vertex x = getVertex(idMin);
-			marque[idMin] = true;
-			nbSommetTraite++;
-
-			for (Edge e : this.listAdjacent.get(x.getId())) {
-				int i = e.getIndexFinalVertex();
-				if (!marque[i]) {
-					if (dist[x.getId()] + e.getValue(0) < dist[i]) {
-						dist[i] = dist[x.getId()] + e.getValue(0);
-					}
-				}
-			}
-		}
-		return dist;
-	}
-
-	public double[] aEtoile(Vertex s, Vertex d) {
-		boolean[] marque = new boolean[this.verticesNb];
-		int nbSommetTraite = 0;
-		
-		marque[s.getId()] = true;
-		nbSommetTraite++;
-		double[] dist = new double[this.verticesNb];
-		double[] heuristic = new double[this.verticesNb];
-
-		// Initialisation
-		Arrays.fill(dist, Double.MAX_VALUE);
-		dist[s.getId()] = 0;
-		for (Edge e : this.listAdjacent.get(s.getId())) {
-			dist[e.getIndexFinalVertex()] = e.getValue(0);
-		}
-
-		// Initialisation de l'heuristique
-		for (int i = 0; i < verticesNb; i++) {
-			heuristic[i] = calcDist(getVertex(i), d);
-		}
-
-		while (nbSommetTraite != this.verticesNb) {
-			double distMin = Double.MAX_VALUE;
-			int idMin = -1;
-
-			for (int i = 0; i < dist.length; i++) {
-				if (!marque[i] && dist[i] + heuristic[i] < distMin) {
-					idMin = i;
-					distMin = dist[i];
-				}
-			}
-
-			if (idMin == -1) {
-				break;
-			}
-
-			Vertex x = getVertex(idMin);
-			marque[idMin] = true;
-			nbSommetTraite++;
-
-			for (Edge e : this.listAdjacent.get(x.getId())) {
-				int i = e.getIndexFinalVertex();
-				if (!marque[i]) {
-					if (dist[x.getId()] + e.getValue(0) < dist[i]) {
-						dist[i] = dist[x.getId()] + e.getValue(0);
-					}
-				}
-			}
-		}
-		return dist;
-	}
-
 	public static double calcDist(Vertex a, Vertex b) {
 		double latA = Math.toRadians(a.getValue(2));
 		double latB = Math.toRadians(b.getValue(2));
@@ -262,52 +158,4 @@ public class Graph {
 		return rayonTerre
 				* Math.acos(Math.sin(latA) * Math.sin(latB) + Math.cos(latA) * Math.cos(latB) * Math.cos(deltaLng));
 	}
-	
-	public double[] dijkstraFibonacci(Vertex s) {
-		double[] dist = new double[this.verticesNb];
-		
-		FibonacciHeap<Vertex> z = new FibonacciHeap<Vertex>();
-		Map<Integer, Entry<Vertex>> vertexEntries = new HashMap<Integer, Entry<Vertex>>();
-		for (Vertex vertex : listVertices) {
-			if (vertex != s) {
-				Entry<Vertex> entry = z.enqueue(vertex, Double.MAX_VALUE); // ne pas tout mettre, juste les vertex pas infinis
-				vertexEntries.put(vertex.getId(), entry);
-			}
-		}
-		
-		// Initialisation
-		Arrays.fill(dist, Double.MAX_VALUE);
-		dist[s.getId()] = 0;
-		
-		for (Edge e : this.listAdjacent.get(s.getId())) {
-			int vertexId = e.getIndexFinalVertex();
-			dist[vertexId] = e.getValue(0);
-			
-			Entry<Vertex> entry = vertexEntries.get(vertexId); // nope
-			z.decreaseKey(entry, e.getValue(0)); // nope
-		}
-
-		while (!z.isEmpty()) { // un compteur ?
-			int vertexId = z.dequeueMin().getValue().getId();
-			vertexEntries.remove(vertexId);
-
-			for (Edge e : this.listAdjacent.get(vertexId)) {
-				int i = e.getIndexFinalVertex();
-				Entry<Vertex> entry = vertexEntries.get(i); // nope
-				
-				if (entry != null) { // regarder si marque[i] == false
-					// marque[i] = true
-					double newValue = dist[vertexId] + e.getValue(0);
-					if (newValue < dist[i]) {
-						// si dist[i] == infini on z.enqueue(vertex, newValue) et on push bien la nouvelle entrée dans la hashmap
-						// sinon on recup l'entree associée au vertex et on z.decreaseKey(entry, newValue)
-						dist[i] = newValue;
-						z.decreaseKey(entry, newValue); // nope
-					}
-				}
-			}
-		}
-		return dist;
-	}
-	
 }

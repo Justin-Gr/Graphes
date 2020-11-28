@@ -1,13 +1,19 @@
 package GraphTester;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Queue;
 import java.util.Stack;
 
+import GraphStructure.Edge;
 import GraphStructure.Graph;
 import GraphStructure.Vertex;
+import ToolBox.FibonacciHeap;
+import ToolBox.FibonacciHeap.Entry;
 
 public abstract class Algorithmes {
 	public static void ParcoursLargeur(Graph g, Vertex a) {
@@ -72,6 +78,206 @@ public abstract class Algorithmes {
 		}
 	}
 	
+	public static double[] dijkstra(Graph g, int s) {
+		
+//		boolean[] marque = new boolean[this.verticesNb];
+//		int nbSommetTraite = 0;
+//
+//		marque[s.getId()] = true;
+//		nbSommetTraite++;
+//		double[] dist = new double[this.verticesNb];
+//
+//		// Initialisation
+//		Arrays.fill(dist, Double.MAX_VALUE);
+//		dist[s.getId()] = 0;
+//		for (Edge e : this.listAdjacent.get(s.getId())) {
+//			dist[e.getIndexFinalVertex()] = e.getValue(0);
+//		}
+//
+//		while (nbSommetTraite != this.verticesNb) {
+//			double distMin = Double.MAX_VALUE;
+//			int idMin = -1;
+//
+//			for (int i = 0; i < dist.length; i++) {
+//				if (!marque[i] && dist[i] < distMin) {
+//					idMin = i;
+//					distMin = dist[i];
+//				}
+//			}
+//
+//			if (idMin == -1) {
+//				break;
+//			}
+//
+//			Vertex x = getVertex(idMin);
+//			marque[idMin] = true;
+//			nbSommetTraite++;
+//
+//			for (Edge e : this.listAdjacent.get(x.getId())) {
+//				int i = e.getIndexFinalVertex();
+//				if (!marque[i]) {
+//					if (dist[x.getId()] + e.getValue(0) < dist[i]) {
+//						dist[i] = dist[x.getId()] + e.getValue(0);
+//					}
+//				}
+//			}
+//		}
+//		return dist;
+		
+		int verticesNb = g.getVerticesNb();
+		
+		boolean[] marque = new boolean[verticesNb];
+		int nbSommetTraite = 0;
+
+		marque[s] = true;
+		nbSommetTraite++;
+		double[] dist = new double[verticesNb];
+
+		// Initialisation
+		Arrays.fill(dist, Double.MAX_VALUE);
+		dist[s] = 0;
+		for (Edge e : g.getListAdjacent(s)) {
+			dist[e.getIndexFinalVertex()] = e.getValue(0);
+		}
+
+		while (nbSommetTraite != verticesNb) {
+			double distMin = Double.MAX_VALUE;
+			int idMin = -1;
+
+			for (int i = 0; i < dist.length; i++) {
+				if (!marque[i] && dist[i] < distMin) {
+					idMin = i;
+					distMin = dist[i];
+				}
+			}
+
+			if (idMin == -1) {
+				break;
+			}
+
+			Vertex x = g.getVertex(idMin);
+			marque[idMin] = true;
+			nbSommetTraite++;
+
+			for (Edge e : g.getListAdjacent(x.getId())) {
+				int siblingId = e.getIndexFinalVertex();
+				if (!marque[siblingId]) {
+					if (dist[x.getId()] + e.getValue(0) < dist[siblingId]) {
+						dist[siblingId] = dist[x.getId()] + e.getValue(0);
+					}
+				}
+			}
+		}
+		return dist;
+	}
+
+	public static double[] aEtoile(Graph g, int s, int d) {
+		int verticesNb = g.getVerticesNb();
+		
+		boolean[] marque = new boolean[verticesNb];
+		int nbSommetTraite = 0;
+		
+		marque[s] = true;
+		nbSommetTraite++;
+		double[] dist = new double[verticesNb];
+		double[] heuristic = new double[verticesNb];
+
+		// Initialisation
+		Arrays.fill(dist, Double.MAX_VALUE);
+		dist[s] = 0;
+		for (Edge e : g.getListAdjacent(s)) {
+			dist[e.getIndexFinalVertex()] = e.getValue(0);
+		}
+
+		// Initialisation de l'heuristique
+		for (int i = 0; i < verticesNb; i++) {
+			heuristic[i] = Graph.calcDist(g.getVertex(i), g.getVertex(d));
+		}
+
+		while (nbSommetTraite != verticesNb) {
+			double distMin = Double.MAX_VALUE;
+			int idMin = -1;
+
+			for (int i = 0; i < dist.length; i++) {
+				if (!marque[i] && dist[i] + heuristic[i] < distMin) {
+					idMin = i;
+					distMin = dist[i];
+				}
+			}
+
+			if (idMin == -1) {
+				break;
+			}
+
+			Vertex x = g.getVertex(idMin);
+			marque[idMin] = true;
+			nbSommetTraite++;
+
+			for (Edge e : g.getListAdjacent(x.getId())) {
+				int i = e.getIndexFinalVertex();
+				if (!marque[i]) {
+					if (dist[x.getId()] + e.getValue(0) < dist[i]) {
+						dist[i] = dist[x.getId()] + e.getValue(0);
+					}
+				}
+			}
+		}
+		return dist;
+	}
+	
+	public static double[] dijkstraFibonacci(Graph g, int s) {
+		int verticesNb = g.getVerticesNb();
+		
+		double[] dist = new double[verticesNb];
+		boolean[] marque = new boolean[verticesNb];
+		
+		FibonacciHeap<Vertex> fiboHeap = new FibonacciHeap<Vertex>();
+		Map<Integer, Entry<Vertex>> vertexEntries = new HashMap<Integer, Entry<Vertex>>();
+		
+		
+		// Initialisation
+		Arrays.fill(dist, Double.MAX_VALUE);
+		dist[s] = 0;
+		marque[s] = true;
+		
+		for (Edge e : g.getListAdjacent(s)) {
+			int vertexId = e.getIndexFinalVertex();
+			
+			dist[vertexId] = e.getValue(0);
+			Entry<Vertex> entry = fiboHeap.enqueue(g.getVertex(vertexId), e.getValue(0));
+			
+			vertexEntries.put(vertexId, entry);
+		}
+		
+		while (!fiboHeap.isEmpty()) {
+			int vertexId = fiboHeap.dequeueMin().getValue().getId();
+			vertexEntries.remove(vertexId);
+			marque[vertexId] = true;
+			
+			for (Edge e : g.getListAdjacent(vertexId)) {
+				int siblingId = e.getIndexFinalVertex();
+				
+				if (marque[siblingId] == false) {					
+					double newValue = dist[vertexId] + e.getValue(0);
+					if (newValue < dist[siblingId]) {
+
+						if (dist[siblingId] < Double.MAX_VALUE) {
+							Entry<Vertex> entry = vertexEntries.get(siblingId);
+							fiboHeap.decreaseKey(entry, newValue);
+						} else {
+							Entry<Vertex> entry = fiboHeap.enqueue(g.getVertex(siblingId), newValue);
+							vertexEntries.put(siblingId, entry);
+						}
+						
+						dist[siblingId] = newValue;
+					}
+				}
+			}
+		}
+		
+		return dist;
+	}
+	
 	public static void VRP1(Graph g, int n) {
 		int nbCommunes = g.getVerticesNb();
 		
@@ -87,7 +293,7 @@ public abstract class Algorithmes {
 		// on applique dijkstra pour chaque ville et on stocke les tableaux des distances obtenus
 		List<double[]> distancesVilles = new ArrayList<double[]>();
 		for (Vertex ville : villes) {
-			double[] distances = g.dijkstraFibonacci(ville);
+			double[] distances = Algorithmes.dijkstraFibonacci(g, ville.getId());
 			distancesVilles.add(distances);
 		}
 		
