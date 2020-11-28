@@ -83,12 +83,10 @@ public class Graph {
 	}
 
 	public void addVertex(Vertex vertex) {
-		if (!listVertices.contains(vertex)) {
-			this.listVertices.add(vertex);
-
-			this.listAdjacent.add(vertex.getId(), new LinkedList<Edge>());
-			this.verticesNb++;
-		}
+		this.listVertices.add(vertex);
+		
+		this.listAdjacent.add(vertex.getId(), new LinkedList<Edge>());
+		this.verticesNb++;
 	}
 
 	public Edge getEdge(int i) {

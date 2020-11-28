@@ -1,8 +1,6 @@
 package GraphTester;
 import ToolBox.GraphLoader;
 
-import java.util.Arrays;
-
 import GraphStructure.Graph;
 
 public class TestMain {
@@ -14,8 +12,8 @@ public class TestMain {
 			startTime = System.nanoTime();
 //			Graph g = GraphLoader.loadFile("assets/GrapheStructureNonOriente.gsb");
 //			Graph g = GraphLoader.loadFile("assets/CommunesFrance_1000_20_ppv.gsb");
-			Graph g = GraphLoader.loadFile("assets/CommunesFrance_5000_50.gsb");
-//			Graph g = GraphLoader.loadXLSX("assets/CommunesFrance.xlsx", 5000, 50);
+//			Graph g = GraphLoader.loadFile("assets/CommunesFrance_5000_50.gsb");
+			Graph g = GraphLoader.loadXLSX("assets/CommunesFrance.xlsx", 5000, 50);
 //			g.printListAdjacent();
 			endTime = System.nanoTime();
 			
@@ -51,7 +49,7 @@ public class TestMain {
 //			endTime = System.nanoTime();
 //			
 //			System.out.println("Fin de VRP1, durée : " + (endTime-startTime)/1e9 + "s");
-			
+						
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
