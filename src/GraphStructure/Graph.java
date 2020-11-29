@@ -150,12 +150,13 @@ public class Graph {
 		double latA = Math.toRadians(a.getValue(2));
 		double latB = Math.toRadians(b.getValue(2));
 		double deltaLng = Math.toRadians(b.getValue(1) - a.getValue(1));
-		
+
 		// System.out.println("Latitude a = " + latA + " Latitude b = " + latB);
 		// System.out.println("Delta lng = " + deltaLng);
 		double rayonTerre = 6378.137;
-		
-		return rayonTerre
+
+		double dist = rayonTerre
 				* Math.acos(Math.sin(latA) * Math.sin(latB) + Math.cos(latA) * Math.cos(latB) * Math.cos(deltaLng));
+		return dist;
 	}
 }

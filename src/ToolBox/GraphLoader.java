@@ -80,7 +80,7 @@ public abstract class GraphLoader {
 	}
 
 	public static Graph loadXLSX(String filename, double popLimit, double distLimit) {
-		Graph g = new Graph("Carte", false, 0, 0, 0, 1);
+		Graph g = new Graph("CommunesFrance_" + (int) popLimit + "_" + (int) distLimit, false, 0, 0, 0, 1);
 		try {
 			File file = new File(filename); // creating a new file instance
 			FileInputStream fis = new FileInputStream(file); // obtaining bytes from the file
@@ -95,7 +95,7 @@ public abstract class GraphLoader {
 				Cell cell = row.getCell(3);
 				if (cell.getNumericCellValue() >= popLimit) {
 					Vertex v = new Vertex(id++, row.getCell(1).getStringCellValue(), row.getCell(3).getNumericCellValue(), row.getCell(4).getNumericCellValue(), row.getCell(5).getNumericCellValue());
-					// System.out.println(v);
+//					System.out.println(v);
 					g.addVertex(v);
 				}
 			}
@@ -112,7 +112,7 @@ public abstract class GraphLoader {
 					if(dist < distLimit) {
 						Edge e = new Edge(idEdge++, a.getId(), b.getId(), 1);
 						e.setValue(0, dist);
-						// System.out.println(e);
+//						System.out.println(e);
 						g.addEdge(e);
 					}
 				}

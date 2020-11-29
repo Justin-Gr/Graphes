@@ -23,18 +23,18 @@ public abstract class Algorithmes {
 		int p = 1;
 
 		// Initialisation
-		for(Vertex v : g.getListVertices()) {
+		for (Vertex v : g.getListVertices()) {
 			marque[v.getId()] = false;
 			traite[v.getId()] = 0;
 		}
 		marque[a.getId()] = true;
 		f.add(a);
-		
-		while(!f.isEmpty()) {
+
+		while (!f.isEmpty()) {
 			Vertex v = f.peek();
 			List<Vertex> neighbors = g.getNeighbors(v);
-			for(Vertex n : neighbors) {
-				if(!marque[n.getId()]) {
+			for (Vertex n : neighbors) {
+				if (!marque[n.getId()]) {
 					marque[n.getId()] = true;
 					f.add(n);
 				}
@@ -45,30 +45,30 @@ public abstract class Algorithmes {
 			p++;
 		}
 	}
-	
+
 	public static void ParcoursProfondeur(Graph g, Vertex a) {
 		boolean[] marque = new boolean[g.getVerticesNb()];
 		int[] traite = new int[g.getVerticesNb()];
 		Stack<Vertex> pile = new Stack<Vertex>();
 		int p = 1;
-		
+
 		// Initialisation
-		for(Vertex v : g.getListVertices()) {
+		for (Vertex v : g.getListVertices()) {
 			marque[v.getId()] = false;
 			traite[v.getId()] = 0;
 		}
 		pile.add(a);
-		
+
 		Vertex v;
-		while(!pile.empty()) {			
+		while (!pile.empty()) {
 			v = pile.pop();
-			
+
 			if (!marque[v.getId()]) {
 				marque[v.getId()] = true;
 				traite[v.getId()] = p++;
 				System.out.println(v.getId());
 			}
-			
+
 			List<Vertex> neighbors = g.getNeighbors(v);
 			for (Vertex n : neighbors) {
 				if (!marque[n.getId()]) {
@@ -77,17 +77,17 @@ public abstract class Algorithmes {
 			}
 		}
 	}
-	
+
 	public static double[] dijkstra(Graph g, int s) {
 		int verticesNb = g.getVerticesNb();
-		
+
 		Map<Integer, Vertex> z = new HashMap<Integer, Vertex>();
 		for (Vertex v : g.getListVertices()) {
 			if (v.getId() != s) {
 				z.put(v.getId(), v);
 			}
 		}
-		
+
 		double[] dist = new double[verticesNb];
 
 		// Initialisation
@@ -123,48 +123,61 @@ public abstract class Algorithmes {
 					}
 				}
 			}
-		}		
+		}
 		return dist;
 	}
 
-	public static double[] aEtoile(Graph g, int s, int d) {
+	public static double[] aEtoile(Graph g, int s, int d) throws Exception {
 		int verticesNb = g.getVerticesNb();
-		
+
 		Map<Integer, Vertex> z = new HashMap<Integer, Vertex>();
 		for (Vertex v : g.getListVertices()) {
 			if (v.getId() != s) {
 				z.put(v.getId(), v);
 			}
 		}
-		
-		double[] dist = new double[verticesNb];
-		double[] heuristic = new double[verticesNb];
 
-		// Initialisation
+		double[] dist = new double[verticesNb];
+		double[] estimation = new double[verticesNb];
+		int[] predecessor = new int[verticesNb];
+
+		// Initialisation des distances et prédécesseurs
 		Arrays.fill(dist, Double.MAX_VALUE);
+		Arrays.fill(predecessor, -1);
 		dist[s] = 0;
 		for (Edge e : g.getListAdjacent(s)) {
 			dist[e.getIndexFinalVertex()] = e.getValue(0);
+			predecessor[e.getIndexFinalVertex()] = s;
 		}
 
-		// Initialisation de l'heuristique
+		// Initialisation de l'estimation
 		for (int i = 0; i < verticesNb; i++) {
-			heuristic[i] = Graph.calcDist(g.getVertex(i), g.getVertex(d));
+			estimation[i] = Graph.calcDist(g.getVertex(i), g.getVertex(d));
 		}
 
 		while (!z.isEmpty()) {
 			double distMin = Double.MAX_VALUE;
 			int idMin = -1;
 
-			for (int i = 0; i < dist.length; i++) {
-				if (z.containsKey(i) && dist[i] + heuristic[i] < distMin) {
+			for (int i : z.keySet()) {
+				if (dist[i] + estimation[i] < distMin) {
 					idMin = i;
-					distMin = dist[i];
+					distMin = dist[i] + estimation[i];
 				}
 			}
 
+			// Destination inatteignable
 			if (idMin == -1) {
-				break;
+				throw new Exception("Destination inatteignable !");
+			} else if (idMin == d) { // Destination atteinte
+				int index = d;
+				System.out.print("Le chemin trouvé (à l'envers) : ");
+				while (index != -1) {
+					System.out.print( g.getVertex(index).getName() + " - ");
+					index = predecessor[index];
+				}
+				System.out.println();
+				return dist;
 			}
 
 			Vertex x = g.getVertex(idMin);
@@ -175,45 +188,46 @@ public abstract class Algorithmes {
 				if (z.containsKey(neighborId)) {
 					if (dist[x.getId()] + e.getValue(0) < dist[neighborId]) {
 						dist[neighborId] = dist[x.getId()] + e.getValue(0);
+						predecessor[neighborId] = x.getId();
 					}
 				}
 			}
 		}
-		return dist;
+		return null;
 	}
-	
+
 	public static double[] dijkstraFibonacci(Graph g, int s) {
 		int verticesNb = g.getVerticesNb();
-		
+
 		double[] dist = new double[verticesNb];
 		boolean[] marque = new boolean[verticesNb];
-		
+
 		FibonacciHeap<Vertex> fiboHeap = new FibonacciHeap<Vertex>();
 		Map<Integer, Entry<Vertex>> vertexEntries = new HashMap<Integer, Entry<Vertex>>();
-				
+
 		// Initialisation
 		Arrays.fill(dist, Double.MAX_VALUE);
 		dist[s] = 0;
 		marque[s] = true;
-		
+
 		for (Edge e : g.getListAdjacent(s)) {
 			int vertexId = e.getIndexFinalVertex();
-			
+
 			dist[vertexId] = e.getValue(0);
 			Entry<Vertex> entry = fiboHeap.enqueue(g.getVertex(vertexId), e.getValue(0));
-			
+
 			vertexEntries.put(vertexId, entry);
 		}
-		
+
 		while (!fiboHeap.isEmpty()) {
 			int vertexId = fiboHeap.dequeueMin().getValue().getId();
 			vertexEntries.remove(vertexId);
 			marque[vertexId] = true;
-			
+
 			for (Edge e : g.getListAdjacent(vertexId)) {
 				int neighborId = e.getIndexFinalVertex();
-				
-				if (marque[neighborId] == false) {					
+
+				if (marque[neighborId] == false) {
 					double newValue = dist[vertexId] + e.getValue(0);
 					if (newValue < dist[neighborId]) {
 
@@ -224,7 +238,7 @@ public abstract class Algorithmes {
 							Entry<Vertex> entry = fiboHeap.enqueue(g.getVertex(neighborId), newValue);
 							vertexEntries.put(neighborId, entry);
 						}
-						
+
 						dist[neighborId] = newValue;
 					}
 				}
@@ -232,10 +246,10 @@ public abstract class Algorithmes {
 		}
 		return dist;
 	}
-	
+
 	public static void VRP1(Graph g, int n) {
 		int nbCommunes = g.getVerticesNb();
-		
+
 		// on cherche les villes de plus de n habitants
 		List<Vertex> villes = new ArrayList<Vertex>();
 		for (int i = 0; i < nbCommunes; i++) {
@@ -244,14 +258,15 @@ public abstract class Algorithmes {
 				villes.add(v);
 			}
 		}
-		
-		// on applique dijkstra pour chaque ville et on stocke les tableaux des distances obtenus
+
+		// on applique dijkstra pour chaque ville et on stocke les tableaux des
+		// distances obtenus
 		List<double[]> distancesVilles = new ArrayList<double[]>();
 		for (Vertex ville : villes) {
 			double[] distances = Algorithmes.dijkstraFibonacci(g, ville.getId());
 			distancesVilles.add(distances);
 		}
-		
+
 		// on fait la moyenne des différents tableaux des distances de chaque ville
 		double[] moyennes = new double[nbCommunes];
 		for (double[] distancesVille : distancesVilles) {
@@ -263,7 +278,7 @@ public abstract class Algorithmes {
 				}
 			}
 		}
-		
+
 		// on cherche la commune dont la distance moyenne à chaque ville est minimale
 		int indexMin = -1;
 		double moyenneMin = Double.MAX_VALUE;
@@ -273,14 +288,16 @@ public abstract class Algorithmes {
 				moyenneMin = moyennes[i];
 			}
 		}
-		
+
 		if (moyenneMin != Double.MAX_VALUE) {
-			System.out.println(g.getVertex(indexMin).getName() + " a la plus petite moyenne des distances de : " + (int) moyenneMin + "km");
+			System.out.println(g.getVertex(indexMin).getName() + " a la plus petite moyenne des distances de : "
+					+ (int) moyenneMin + "km");
 		} else {
-			System.out.println("Le graphe n'est pas suffisamment connexe pour permettre l'accès à toutes les grandes villes");
+			System.out.println(
+					"Le graphe n'est pas suffisamment connexe pour permettre l'accès à toutes les grandes villes");
 		}
 	}
-	
+
 	public static void VRP2(Graph g, int n) {
 		// TODO
 	}
