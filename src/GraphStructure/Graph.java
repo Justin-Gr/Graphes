@@ -108,7 +108,7 @@ public class Graph {
 
 		if (!this.directed) {
 			LinkedList<Edge> successorsB = listAdjacent.get(idFinal);
-			Edge opposite = edge.opposite();
+			Edge opposite = edge.reverse();
 			if (!successorsB.contains(opposite)) {
 				successorsB.add(opposite);
 				this.edgesNb++;
