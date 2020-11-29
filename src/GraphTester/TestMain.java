@@ -1,8 +1,6 @@
 package GraphTester;
 import ToolBox.GraphLoader;
 
-import java.util.Arrays;
-
 import GraphStructure.Graph;
 
 public class TestMain {
@@ -11,7 +9,7 @@ public class TestMain {
 		try {
 			long startTime, endTime;
 			
-			System.out.println("Génération du graphe...");
+			System.out.println("Gï¿½nï¿½ration du graphe...");
 			startTime = System.nanoTime();
 //			Graph g = GraphLoader.loadFile("assets/GrapheStructureNonOriente.gsb");
 //			Graph g = GraphLoader.loadFile("assets/CommunesFrance_1000_20_ppv.gsb");
@@ -20,7 +18,7 @@ public class TestMain {
 //			g.printListAdjacent();
 			endTime = System.nanoTime();
 			
-			System.out.println("Graphe généré avec succès, durée : " + (endTime-startTime)/1e9 + "s");
+			System.out.println("Graphe gï¿½nï¿½rï¿½ avec succï¿½s, durï¿½e : " + (endTime-startTime)/1e9 + "s");
 			System.out.println();
 			
 			int idA = 9759;
@@ -33,7 +31,7 @@ public class TestMain {
 			
 			// System.out.println(Arrays.toString(dist1));
 			System.out.println("Distance " + g.getVertex(idA).getName() + "-" + g.getVertex(idB).getName() + " : " + dist1[idB] + " km");
-			System.out.println("Fin de aEtoile, durée : " + (endTime-startTime)/1e9 + "s");
+			System.out.println("Fin de aEtoile, durï¿½e : " + (endTime-startTime)/1e9 + "s");
 			System.out.println();
 			
 			
@@ -44,7 +42,7 @@ public class TestMain {
 
 //			System.out.println(Arrays.toString(dist2));
 			System.out.println("Distance " + g.getVertex(idA).getName() + "-" + g.getVertex(idB).getName() + " : " + dist2[idB] + " km");
-			System.out.println("Fin de Dijkstra Fibonacci, durée : " + (endTime-startTime)/1e9 + "s");
+			System.out.println("Fin de Dijkstra Fibonacci, durï¿½e : " + (endTime-startTime)/1e9 + "s");
 			System.out.println();
 			
 			
@@ -55,23 +53,23 @@ public class TestMain {
 
 //			System.out.println(Arrays.toString(dist2));
 			System.out.println("Distance " + g.getVertex(idA).getName() + "-" + g.getVertex(idB).getName() + " : " + dist3[idB] + " km");
-			System.out.println("Fin de Dijkstra, durée : " + (endTime-startTime)/1e9 + "s");
+			System.out.println("Fin de Dijkstra, durï¿½e : " + (endTime-startTime)/1e9 + "s");
 			
-			// Vérification
+			// Vï¿½rification
 			boolean test = true;
 			for (int i = 0; i < g.getVerticesNb(); i++) {
 				if (dist2[i] != dist3[i]) {
 					test = false;
 				}
 			}
-			System.out.println("Résultats identiques : " + test);
+			System.out.println("Rï¿½sultats identiques : " + test);
 			
 //			startTime = System.nanoTime();
 //			Algorithmes.VRP1(g, 200000);
 //			endTime = System.nanoTime();
 //			
-//			System.out.println("Fin de VRP1, durée : " + (endTime-startTime)/1e9 + "s");
-			
+//			System.out.println("Fin de VRP1, durï¿½e : " + (endTime-startTime)/1e9 + "s");
+						
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
