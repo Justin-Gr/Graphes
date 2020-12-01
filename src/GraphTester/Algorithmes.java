@@ -102,8 +102,8 @@ public abstract class Algorithmes {
 			double distMin = Double.MAX_VALUE;
 			int idMin = -1;
 
-			for (int i = 0; i < dist.length; i++) {
-				if (z.containsKey(i) && dist[i] < distMin) { // temps constant
+			for (int i : z.keySet()) {
+				if (dist[i] < distMin) { // temps constant
 					idMin = i;
 					distMin = dist[i];
 				}
