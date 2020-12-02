@@ -215,17 +215,10 @@ public abstract class Algorithmes {
 		// Initialisation
 		Arrays.fill(dist, Double.MAX_VALUE);
 		dist[s] = 0;
-		marque[s] = true;
-
-		for (Edge e : g.getListAdjacent(s)) {
-			int vertexId = e.getIndexFinalVertex();
-
-			dist[vertexId] = e.getValue(0);
-			Entry<Vertex> entry = fiboHeap.enqueue(g.getVertex(vertexId), e.getValue(0));
-
-			vertexEntries.put(vertexId, entry);
-		}
-
+		
+		Entry<Vertex> initialEntry = fiboHeap.enqueue(g.getVertex(s), 0);
+		vertexEntries.put(s, initialEntry);
+		
 		while (!fiboHeap.isEmpty()) {
 			int vertexId = fiboHeap.dequeueMin().getValue().getId();
 			vertexEntries.remove(vertexId);
@@ -245,8 +238,8 @@ public abstract class Algorithmes {
 							Entry<Vertex> entry = fiboHeap.enqueue(g.getVertex(neighborId), newValue);
 							vertexEntries.put(neighborId, entry);
 						}
-
 						dist[neighborId] = newValue;
+						
 					}
 				}
 			}
