@@ -18,7 +18,7 @@ public class Edge {
 		this.values = new double[valuesNb];
 	}
 	
-	public Edge opposite() {
+	public Edge reverse() {
 		Edge opposite = new Edge(-id, indexFinalVertex, indexInitialVertex, valuesNb);
 		opposite.values = values;
 		return opposite;

@@ -22,4 +22,12 @@ public class ListEdges extends ArrayList<Edge> {
 		return this.value;
 	}
 	
+	public ListEdges reverse() {
+		ListEdges reversed = new ListEdges();
+		for (int i = this.size() - 1; i >= 0; i--) {
+			reversed.add(this.get(i));
+		}
+		return reversed;
+	}
+	
 }

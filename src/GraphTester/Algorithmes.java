@@ -11,6 +11,7 @@ import java.util.Stack;
 
 import GraphStructure.Edge;
 import GraphStructure.Graph;
+import GraphStructure.ListEdges;
 import GraphStructure.Vertex;
 import ToolBox.FibonacciHeap;
 import ToolBox.FibonacciHeap.Entry;
@@ -101,8 +102,8 @@ public abstract class Algorithmes {
 			double distMin = Double.MAX_VALUE;
 			int idMin = -1;
 
-			for (int i = 0; i < dist.length; i++) {
-				if (z.containsKey(i) && dist[i] < distMin) { // temps constant
+			for (int i : z.keySet()) {
+				if (dist[i] < distMin) { // temps constant
 					idMin = i;
 					distMin = dist[i];
 				}
@@ -127,8 +128,9 @@ public abstract class Algorithmes {
 		return dist;
 	}
 
-	public static double[] aEtoile(Graph g, int s, int d) throws Exception {
+	public static ListEdges aEtoile(Graph g, int s, int d) throws Exception {
 		int verticesNb = g.getVerticesNb();
+		ListEdges chemin = new ListEdges();
 
 		Map<Integer, Vertex> z = new HashMap<Integer, Vertex>();
 		for (Vertex v : g.getListVertices()) {
@@ -171,13 +173,19 @@ public abstract class Algorithmes {
 				throw new Exception("Destination inatteignable !");
 			} else if (idMin == d) { // Destination atteinte
 				int index = d;
-				System.out.print("Le chemin trouvé (à l'envers) : ");
 				while (index != -1) {
-					System.out.print( g.getVertex(index).getName() + " - ");
+					int previous = predecessor[index];
+					if (previous == -1) {
+						previous = s;
+						break;
+					}
+					Edge e = new Edge (0, previous, index, 1);
+					e.setValue(0, dist[index] - dist[previous]);
+					chemin.add(e);
 					index = predecessor[index];
 				}
 				System.out.println();
-				return dist;
+				return chemin.reverse();
 			}
 
 			Vertex x = g.getVertex(idMin);
