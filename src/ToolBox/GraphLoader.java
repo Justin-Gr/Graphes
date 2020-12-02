@@ -38,7 +38,7 @@ public abstract class GraphLoader {
 
 		scanner.nextLine();
 
-		Graph g = new Graph(graphName, directed, 0, verticesValueNb, 0, edgesValueNb);
+		Graph g = new Graph(graphName, directed);
 
 		String line;
 
@@ -82,7 +82,7 @@ public abstract class GraphLoader {
 	}
 
 	public static Graph loadXLSX(String filename, double popLimit, double distLimit) {
-		Graph g = new Graph("CommunesFrance_" + (int) popLimit + "_" + (int) distLimit, false, 0, 0, 0, 1);
+		Graph g = new Graph("CommunesFrance_" + (int) popLimit + "_" + (int) distLimit, false);
 		try {
 			File file = new File(filename); // creating a new file instance
 			FileInputStream fis = new FileInputStream(file); // obtaining bytes from the file
@@ -128,7 +128,7 @@ public abstract class GraphLoader {
 	}
 	
 	public static Graph genererSousGrapheGrandesVilles(Graph g, int n, List<Integer> tableIndex) {
-		Graph sg = new Graph("Carte grandes villes", false, 0, 3, 0, 1);
+		Graph sg = new Graph("Carte grandes villes", false);
 		
 		int vertexCounter = 0;
 		for (int i = 0; i < g.getVerticesNb(); i++) {
