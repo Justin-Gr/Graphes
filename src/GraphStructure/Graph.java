@@ -145,6 +145,9 @@ public class Graph {
 	}
 
 	public static double calcDist(Vertex a, Vertex b) {
+		if(a.equals(b)) {
+			return 0.0;
+		}
 		double latA = Math.toRadians(a.getValue(2));
 		double latB = Math.toRadians(b.getValue(2));
 		double deltaLng = Math.toRadians(b.getValue(1) - a.getValue(1));
@@ -156,5 +159,14 @@ public class Graph {
 		double dist = rayonTerre
 				* Math.acos(Math.sin(latA) * Math.sin(latB) + Math.cos(latA) * Math.cos(latB) * Math.cos(deltaLng));
 		return dist;
+	}
+	
+	public int getVertexByName(String name) {
+		for(Vertex v : listVertices) {
+			if (v.getName().equals(name)) {
+				return v.getId();
+			}
+		}
+		return -1;
 	}
 }

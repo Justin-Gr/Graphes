@@ -184,7 +184,6 @@ public abstract class Algorithmes {
 					chemin.add(e);
 					index = predecessor[index];
 				}
-				System.out.println();
 				return chemin.reverse();
 			}
 
