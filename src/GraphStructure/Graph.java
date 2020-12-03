@@ -92,6 +92,7 @@ public class Graph {
 			if (!successorsB.contains(opposite)) {
 				successorsB.add(opposite);
 				this.edgesNb++;
+				this.listEdges.add(opposite);
 			}
 		}
 	}
@@ -108,6 +109,10 @@ public class Graph {
 		return this.listVertices;
 	}
 
+	public ListEdges getListEdges() {
+		return this.listEdges;
+	}
+	
 	public List<Vertex> getNeighbors(Vertex vertex) {
 		LinkedList<Edge> list = listAdjacent.get(vertex.getId());
 

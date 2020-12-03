@@ -360,7 +360,7 @@ public abstract class Algorithmes {
 		// Affichage du résultat
 		if (moyenneMin != Double.MAX_VALUE) {
 			System.out.println(g.getVertex(indexMin).getName() + " a la plus petite moyenne des distances de : "
-					+ (int) moyenneMin + "km");
+					+ (int) moyenneMin + " km");
 		} else {
 			System.out.println(
 					"Le graphe n'est pas suffisamment connexe pour permettre l'accès à toutes les grandes villes");

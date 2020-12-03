@@ -52,7 +52,7 @@ public abstract class GraphLoader {
 			Vertex v = new Vertex(id, vertexName, verticesValueNb);
 
 			for (int j = 0; j < verticesValueNb; j++) {
-				v.setValue(j, Integer.parseInt(params[2 + j]));
+				v.setValue(j, Double.parseDouble(params[2 + j]));
 			}
 
 			g.addVertex(v);

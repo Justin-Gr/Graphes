@@ -14,25 +14,18 @@ public class Main {
 			
 		System.out.println("==========QUESTION 2==========\n");
 		
-		System.out.println("Construction d'un graphe G1 des communes de plus de 5000 habitants, rayon de liaison : 50km");
+		System.out.println("Construction d'un graphe G1 des communes de plus de 5000 habitants, rayon de liaison : 50 km");
 		startTime = System.nanoTime();
 		Graph g_5000_50 = GraphLoader.loadXLSX("assets/CommunesFrance.xlsx", 5000, 50);
 		endTime = System.nanoTime();
 		System.out.println("Fin de la construction, duree : " + (endTime-startTime)/1e9 + "s\n");
 		
-		System.out.println("Construction d'un graphe G2 des communes de plus de 1000 habitants, rayon de liaison : 20km");
-		System.out.println("Cette opération peut prendre jusqu'à 1 minute");
+		System.out.println("Construction d'un graphe G2 des communes de plus de 1000 habitants, rayon de liaison : 20 km");
+		System.out.println("Cette operation peut prendre jusqu'a 1 minute");
 		startTime = System.nanoTime();
 		Graph g_1000_20 = GraphLoader.loadXLSX("assets/CommunesFrance.xlsx", 1000, 20);
 		endTime = System.nanoTime();
 		System.out.println("Fin de la construction, duree : " + (endTime-startTime)/1e9 + "s\n");
-		
-//		System.out.println("Construction d'un graphe G3 de toutes les communes, rayon de liaison : 20km");
-//		System.out.println("Cette opération peut prendre jusqu'à 5 minutes");
-//		startTime = System.nanoTime();
-//		Graph g_0_20 = GraphLoader.loadXLSX("assets/CommunesFrance.xlsx", 0, 20);
-//		endTime = System.nanoTime();
-//		System.out.println("Fin de la construction, duree : " + (endTime-startTime)/1e9 + "s\n");
 		
 		
 		System.out.println("==========QUESTION 4==========\n");
@@ -51,7 +44,7 @@ public class Main {
 			System.out.print(e);
 		}
 		System.out.println();
-		System.out.println("distance totale : " + cheminG1.calcSum(0) + "km\n");
+		System.out.println("distance totale : " + cheminG1.calcSum(0) + " km\n");
 		
 		System.out.println("Application de l'algorithme de Dijkstra sur le graphe G1 :");
 		startTime = System.nanoTime();
@@ -61,7 +54,7 @@ public class Main {
 		double tempsDijkstraG1 = (endTime - startTime)/1e6;
 
 		System.out.println("Fin de Dijsktra, duree : " + tempsDijkstraG1 + "ms");
-		System.out.println("distance entre " + g_5000_50.getVertex(idA).getName() + " et " + g_5000_50.getVertex(idB).getName() + " : " + distG1[idB] + "km\n");
+		System.out.println("distance entre " + g_5000_50.getVertex(idA).getName() + " et " + g_5000_50.getVertex(idB).getName() + " : " + distG1[idB] + " km\n");
 		
 		
 		System.out.println();
@@ -81,7 +74,7 @@ public class Main {
 			System.out.print(e);
 		}
 		System.out.println();
-		System.out.println("distance totale : " + cheminG2.calcSum(0) + "km\n");
+		System.out.println("distance totale : " + cheminG2.calcSum(0) + " km\n");
 		
 		System.out.println("Application de l'algorithme de Dijkstra sur le graphe G2 :");
 		startTime = System.nanoTime();
@@ -91,7 +84,7 @@ public class Main {
 		double tempsDijkstraG2 = (endTime - startTime)/1e6;
 
 		System.out.println("Fin de Dijsktra, duree : " + tempsDijkstraG2 + "ms");
-		System.out.println("distance entre " + g_1000_20.getVertex(idA).getName() + " et " + g_1000_20.getVertex(idB).getName() + " : " + distG2[idB] + "km\n");
+		System.out.println("distance entre " + g_1000_20.getVertex(idA).getName() + " et " + g_1000_20.getVertex(idB).getName() + " : " + distG2[idB] + " km\n");
 		
 		
 		System.out.println("==========QUESTION 5==========\n");
@@ -107,7 +100,7 @@ public class Main {
 		double tempsDijkstraFiboG1 = (endTime - startTime)/1e6;
 
 		System.out.println("Fin de Dijsktra avec tas de Fibonacci, duree : " + tempsDijkstraFiboG1 + "ms");
-		System.out.println("distance entre " + g_5000_50.getVertex(idA).getName() + " et " + g_5000_50.getVertex(idB).getName() + " : " + distG1Fibo[idB] + "km\n");
+		System.out.println("distance entre " + g_5000_50.getVertex(idA).getName() + " et " + g_5000_50.getVertex(idB).getName() + " : " + distG1Fibo[idB] + " km\n");
 		
 		idA = 0;
 		idB = g_1000_20.getVerticesNb() - 1;
@@ -120,7 +113,7 @@ public class Main {
 		double tempsDijkstraFiboG2 = (endTime - startTime)/1e6;
 
 		System.out.println("Fin de Dijsktra avec tas de Fibonacci, duree : " + tempsDijkstraFiboG2 + "ms");
-		System.out.println("distance entre " + g_1000_20.getVertex(idA).getName() + " et " + g_1000_20.getVertex(idB).getName() + " : " + distG2Fibo[idB] + "km\n");
+		System.out.println("distance entre " + g_1000_20.getVertex(idA).getName() + " et " + g_1000_20.getVertex(idB).getName() + " : " + distG2Fibo[idB] + " km\n");
 		
 		
 		System.out.println("Comparaisons sur G1 :");
@@ -134,12 +127,11 @@ public class Main {
 		
 		System.out.println("==========QUESTION 6==========\n");
 		
-		System.out.println("Construction d'un graphe G3 de toutes les communes, rayon de liaison : 20km");
-		System.out.println("Cette opération peut prendre jusqu'à 5 minutes");
+		System.out.println("Chargement du graphe G3 de toutes les communes, rayon de liaison : 20 km");
 		startTime = System.nanoTime();
-		Graph g_0_20 = GraphLoader.loadXLSX("assets/CommunesFrance.xlsx", 0, 20);
+		Graph g_0_20 = GraphLoader.loadFile("assets/CommunesFrance_0_20.gsb");
 		endTime = System.nanoTime();
-		System.out.println("Fin de la construction, duree : " + (endTime-startTime)/1e9 + "s\n");
+		System.out.println("Fin du chargement, duree : " + (endTime-startTime)/1e9 + "s\n");
 		
 		System.out.println("Application de l'algorithme VRP1 sur le graphe G3 :");
 		startTime = System.nanoTime();
