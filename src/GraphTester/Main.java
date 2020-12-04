@@ -31,7 +31,7 @@ public class Main {
 			System.out.println("Fin de la construction, duree : " + (endTime-startTime)/1e9 + "s\n");
 			
 			
-			System.out.println("Appuyez sur entrée pour continuer...");
+			System.out.println("Appuyez sur entree pour continuer...");
 			s.nextLine();
 			System.out.println();
 			
@@ -51,7 +51,7 @@ public class Main {
 				System.out.print(e);
 			}
 			System.out.println();
-			System.out.println("distance totale : " + cheminG1.calcSum(0) + " km\n");
+			System.out.println("Distance totale : " + cheminG1.calcSum(0) + " km\n");
 			
 			System.out.println("Application de l'algorithme de Dijkstra sur le graphe G1 :");
 			startTime = System.nanoTime();
@@ -61,10 +61,10 @@ public class Main {
 			double tempsDijkstraG1 = (endTime - startTime)/1e6;
 	
 			System.out.println("Fin de Dijsktra, duree : " + tempsDijkstraG1 + "ms");
-			System.out.println("distance entre " + g_5000_50.getVertex(idA).getName() + " et " + g_5000_50.getVertex(idB).getName() + " : " + distG1[idB] + " km\n");
+			System.out.println("Distance entre " + g_5000_50.getVertex(idA).getName() + " et " + g_5000_50.getVertex(idB).getName() + " : " + distG1[idB] + " km\n");
 			
 			
-			System.out.println("Appuyez sur entrée pour continuer...");
+			System.out.println("Appuyez sur entree pour continuer...");
 			s.nextLine();
 			System.out.println();
 			
@@ -83,7 +83,7 @@ public class Main {
 				System.out.print(e);
 			}
 			System.out.println();
-			System.out.println("distance totale : " + cheminG2.calcSum(0) + " km\n");
+			System.out.println("Distance totale : " + cheminG2.calcSum(0) + " km\n");
 			
 			System.out.println("Application de l'algorithme de Dijkstra sur le graphe G2 :");
 			startTime = System.nanoTime();
@@ -93,10 +93,10 @@ public class Main {
 			double tempsDijkstraG2 = (endTime - startTime)/1e6;
 	
 			System.out.println("Fin de Dijsktra, duree : " + tempsDijkstraG2 + "ms");
-			System.out.println("distance entre " + g_1000_20.getVertex(idA).getName() + " et " + g_1000_20.getVertex(idB).getName() + " : " + distG2[idB] + " km\n");
+			System.out.println("Distance entre " + g_1000_20.getVertex(idA).getName() + " et " + g_1000_20.getVertex(idB).getName() + " : " + distG2[idB] + " km\n");
 			
 			
-			System.out.println("Appuyez sur entrée pour continuer...");
+			System.out.println("Appuyez sur entree pour continuer...");
 			s.nextLine();
 			System.out.println();
 			
@@ -113,7 +113,7 @@ public class Main {
 			double tempsDijkstraFiboG1 = (endTime - startTime)/1e6;
 	
 			System.out.println("Fin de Dijsktra avec tas de Fibonacci, duree : " + tempsDijkstraFiboG1 + "ms");
-			System.out.println("distance entre " + g_5000_50.getVertex(idA).getName() + " et " + g_5000_50.getVertex(idB).getName() + " : " + distG1Fibo[idB] + " km\n");
+			System.out.println("Distance entre " + g_5000_50.getVertex(idA).getName() + " et " + g_5000_50.getVertex(idB).getName() + " : " + distG1Fibo[idB] + " km\n");
 			
 			idA = 0;
 			idB = g_1000_20.getVerticesNb() - 1;
@@ -126,7 +126,7 @@ public class Main {
 			double tempsDijkstraFiboG2 = (endTime - startTime)/1e6;
 	
 			System.out.println("Fin de Dijsktra avec tas de Fibonacci, duree : " + tempsDijkstraFiboG2 + "ms");
-			System.out.println("distance entre " + g_1000_20.getVertex(idA).getName() + " et " + g_1000_20.getVertex(idB).getName() + " : " + distG2Fibo[idB] + " km\n");
+			System.out.println("Distance entre " + g_1000_20.getVertex(idA).getName() + " et " + g_1000_20.getVertex(idB).getName() + " : " + distG2Fibo[idB] + " km\n");
 			
 			
 			System.out.println("Comparaisons sur G1 :");
@@ -138,7 +138,7 @@ public class Main {
 			System.out.println("Dijkstra avec tas de Fibonacci : " + tempsDijkstraFiboG2 + "ms\n");
 	
 			
-			System.out.println("Appuyez sur entrée pour continuer...");
+			System.out.println("Appuyez sur entree pour continuer...");
 			s.nextLine();
 			System.out.println();
 			
@@ -157,16 +157,38 @@ public class Main {
 			System.out.println("Fin de VRP1, duree : " + (endTime-startTime)/1e6 + "ms\n");
 			
 			
-			System.out.println("Appuyez sur entrée pour continuer...");
+			System.out.println("Appuyez sur entree pour continuer...");
 			s.nextLine();
 			System.out.println();
 			
 			System.out.println("==========QUESTION 7==========\n");
 			
-			System.out.println("Not implemented yet");
+			System.out.println("Application de l'algorithme VRP2 sur le graphe G3 avec un seuil de 200 000 habitants :");
+			startTime = System.nanoTime();
+			ListEdges trajet_200k = Algorithmes.VRP2(g_0_20, 200000);
+			endTime = System.nanoTime();
+			System.out.println("Fin de VRP2, duree : " + (endTime-startTime)/1e6 + "ms");
+			double longueur_200k = trajet_200k.calcSum(0);
+			System.out.println("Longueur du trajet trouve : " + longueur_200k + " km\n");
+			
+			System.out.println("Application de l'algorithme VRP2 sur le graphe G3 avec un seuil de 150 000 habitants :");
+			startTime = System.nanoTime();
+			ListEdges trajet_150k = Algorithmes.VRP2(g_0_20, 150000);
+			endTime = System.nanoTime();
+			System.out.println("Fin de VRP2, duree : " + (endTime-startTime)/1e6 + "ms");
+			double longueur_150k = trajet_150k.calcSum(0);
+			System.out.println("Longueur du trajet trouve : " + longueur_150k + " km\n");
+			
+			System.out.println("Application de l'algorithme VRP2 sur le graphe G3 avec un seuil de 100 000 habitants :");
+			startTime = System.nanoTime();
+			ListEdges trajet_100k = Algorithmes.VRP2(g_0_20, 100000);
+			endTime = System.nanoTime();
+			System.out.println("Fin de VRP2, duree : " + (endTime-startTime)/1e6 + "ms");
+			double longueur_100k = trajet_100k.calcSum(0);
+			System.out.println("Longueur du trajet trouve : " + longueur_100k + " km\n");
 			
 			
-			System.out.println("Appuyez sur entrée pour fermer le programme...");
+			System.out.println("Appuyez sur entree pour fermer le programme...");
 			s.nextLine();
 			System.out.println();
 			

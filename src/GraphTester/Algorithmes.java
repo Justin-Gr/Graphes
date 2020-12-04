@@ -373,7 +373,7 @@ public abstract class Algorithmes {
 		
 		// on extrait le graphe des grandes villes sans aucune arete
 		Graph gVilles = GraphLoader.genererSousGrapheGrandesVilles(g, n, tableIndex);
-		System.out.println(gVilles.getListVertices());
+//		System.out.println(gVilles.getListVertices());
 
 		int nbVilles = gVilles.getVerticesNb();
 		boolean[] marque = new boolean[nbVilles];
@@ -422,9 +422,9 @@ public abstract class Algorithmes {
 				for(Edge e : chemin) {
 					// on ajoute les aretes intermediaires au trajet total
 					trajet.add(e);
-					System.out.println("( " + g.getVertex(e.getIndexInitialVertex()).getName() + " - " + g.getVertex(e.getIndexFinalVertex()).getName() + " ) ");
+//					System.out.println("( " + g.getVertex(e.getIndexInitialVertex()).getName() + " - " + g.getVertex(e.getIndexFinalVertex()).getName() + " ) ");
 				}
-				System.out.println();
+//				System.out.println();
 			} catch (Exception ex) {
 				throw(ex);
 			}
