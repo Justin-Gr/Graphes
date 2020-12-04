@@ -108,6 +108,10 @@ public class Graph {
 	public ListVertices getListVertices() {
 		return this.listVertices;
 	}
+	
+	public ListEdges getListEdges() {
+		return this.listEdges;
+	}
 
 	public ListEdges getListEdges() {
 		return this.listEdges;
