@@ -2,7 +2,6 @@ package GraphTester;
 
 import java.util.Scanner;
 
-import GraphStructure.Edge;
 import GraphStructure.Graph;
 import GraphStructure.ListEdges;
 import ToolBox.GraphLoader;
@@ -46,12 +45,7 @@ public class Main {
 			endTime = System.nanoTime();
 	
 			System.out.println("Fin de A*, duree : " + (endTime-startTime)/1e6 + "ms");
-			System.out.print("Chemin de " + g_5000_50.getVertex(idA).getName() + " à " + g_5000_50.getVertex(idB).getName() + " : ");
-			for(Edge e : cheminG1) {
-				System.out.print(e);
-			}
-			System.out.println();
-			System.out.println("Distance totale : " + cheminG1.calcSum(0) + " km\n");
+			System.out.println("Distance entre " + g_5000_50.getVertex(idA).getName() + " et " + g_5000_50.getVertex(idB).getName() + " : " + cheminG1.calcSum(0) + " km\n");
 			
 			System.out.println("Application de l'algorithme de Dijkstra sur le graphe G1 :");
 			startTime = System.nanoTime();
@@ -78,12 +72,7 @@ public class Main {
 			endTime = System.nanoTime();
 	
 			System.out.println("Fin de A*, duree : " + (endTime-startTime)/1e6 + "ms");
-			System.out.print("Chemin de " + g_1000_20.getVertex(idA).getName() + " à " + g_1000_20.getVertex(idB).getName() + " : ");
-			for(Edge e : cheminG2) {
-				System.out.print(e);
-			}
-			System.out.println();
-			System.out.println("Distance totale : " + cheminG2.calcSum(0) + " km\n");
+			System.out.println("Distance entre " + g_1000_20.getVertex(idA).getName() + " et " + g_1000_20.getVertex(idB).getName() + " : " + cheminG2.calcSum(0) + " km\n");
 			
 			System.out.println("Application de l'algorithme de Dijkstra sur le graphe G2 :");
 			startTime = System.nanoTime();
