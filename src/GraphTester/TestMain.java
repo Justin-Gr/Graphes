@@ -15,7 +15,7 @@ public class TestMain {
 //			Graph g = GraphLoader.loadFile("assets/GrapheStructureNonOriente.gsb");
 //			Graph g = GraphLoader.loadFile("assets/CommunesFrance_1000_20_ppv.gsb");
 //			Graph g = GraphLoader.loadFile("assets/CommunesFrance_5000_50.gsb");
-			Graph g = GraphLoader.loadXLSX("assets/CommunesFrance.xlsx", 50000, 200);
+			Graph g = GraphLoader.loadXLSX("assets/CommunesFrance.xlsx", 5000, 50);
 //			g.printListAdjacent();
 			endTime = System.nanoTime();
 			
@@ -80,3 +80,4 @@ public class TestMain {
 		}
 	}
 }
+

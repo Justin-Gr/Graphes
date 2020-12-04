@@ -11,20 +11,16 @@ public class Graph {
 	private String name;
 	private boolean directed;
 	private int verticesNb;
-	private int verticesValuesNb;
 	private int edgesNb;
-	private int edgesValuesNb;
 	private ListVertices listVertices;
 	private ListEdges listEdges;
 	private List<LinkedList<Edge>> listAdjacent;
 
-	public Graph(String name, boolean directed, int verticesNb, int verticesValuesNb, int edgesNb, int edgesValuesNb) {
+	public Graph(String name, boolean directed) {
 		this.name = name;
 		this.directed = directed;
-		this.verticesNb = verticesNb;
-		this.verticesValuesNb = verticesValuesNb;
-		this.edgesNb = edgesNb;
-		this.edgesValuesNb = edgesValuesNb;
+		this.verticesNb = 0;
+		this.edgesNb = 0;
 		this.listVertices = new ListVertices();
 		this.listEdges = new ListEdges();
 		this.listAdjacent = new ArrayList<LinkedList<Edge>>();
@@ -54,28 +50,12 @@ public class Graph {
 		this.verticesNb = verticesNb;
 	}
 
-	public int getVerticesValuesNb() {
-		return verticesValuesNb;
-	}
-
-	public void setVerticesValuesNb(int verticesValuesNb) {
-		this.verticesValuesNb = verticesValuesNb;
-	}
-
 	public int getEdgesNb() {
 		return edgesNb;
 	}
 
 	public void setEdgesNb(int edgesNb) {
 		this.edgesNb = edgesNb;
-	}
-
-	public int getEdgesValuesNb() {
-		return edgesValuesNb;
-	}
-
-	public void setEdgesValuesNb(int edgesValuesNb) {
-		this.edgesValuesNb = edgesValuesNb;
 	}
 
 	public Vertex getVertex(int i) {
@@ -112,6 +92,7 @@ public class Graph {
 			if (!successorsB.contains(opposite)) {
 				successorsB.add(opposite);
 				this.edgesNb++;
+				this.listEdges.add(opposite);
 			}
 		}
 	}
@@ -132,6 +113,10 @@ public class Graph {
 		return this.listEdges;
 	}
 
+	public ListEdges getListEdges() {
+		return this.listEdges;
+	}
+	
 	public List<Vertex> getNeighbors(Vertex vertex) {
 		LinkedList<Edge> list = listAdjacent.get(vertex.getId());
 
@@ -148,6 +133,14 @@ public class Graph {
 		}
 	}
 
+	/**
+	 * Calcule et retourne la distance entre deux sommets
+	 * Les sommets doivent posséder une valeur de latitude et de longitude
+	 * 
+	 * @param a sommet 1
+	 * @param b sommet 2
+	 * @return la distance entre a et b
+	 */
 	public static double calcDist(Vertex a, Vertex b) {
 		if(a.equals(b)) {
 			return 0.0;

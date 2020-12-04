@@ -18,11 +18,19 @@ import ToolBox.FibonacciHeap.Entry;
 import ToolBox.GraphLoader;
 
 public abstract class Algorithmes {
+	
+	/**
+	 * Affiche le parcours en largeur d'un graphe donnï¿½
+	 * 
+	 * @param g le graphe sur lequel appliquer l'algorithme
+	 * @param a le sommet de dï¿½part
+	 */
 	public static void ParcoursLargeur(Graph g, Vertex a) {
-		boolean[] marque = new boolean[g.getVerticesNb()];
-		int[] traite = new int[g.getVerticesNb()];
-		Queue<Vertex> f = new LinkedList<Vertex>();
+		boolean[] marque = new boolean[g.getVerticesNb()]; // garde trace des sommets visitï¿½s
+		int[] traite = new int[g.getVerticesNb()]; // garde trace de l'ordre de passage de chaque sommet
 		int p = 1;
+		
+		Queue<Vertex> f = new LinkedList<Vertex>();
 
 		// Initialisation
 		for (Vertex v : g.getListVertices()) {
@@ -32,27 +40,38 @@ public abstract class Algorithmes {
 		marque[a.getId()] = true;
 		f.add(a);
 
+		// Tant que la file n'est pas vide
 		while (!f.isEmpty()) {
+			// On prend le sommet en tï¿½te de la file et on parcours ses voisins
 			Vertex v = f.peek();
 			List<Vertex> neighbors = g.getNeighbors(v);
 			for (Vertex n : neighbors) {
+				// Si le voisin n'a pas dï¿½jï¿½ ï¿½tï¿½ visitï¿½ on le marque comme tel et on l'ajoute dans la file
 				if (!marque[n.getId()]) {
 					marque[n.getId()] = true;
 					f.add(n);
 				}
 			}
-			traite[v.getId()] = p;
+			// on garde en mï¿½moire l'ordre de passage pour le sommet actuel et on affiche son id
+			traite[v.getId()] = p++;
 			System.out.println(v.getId());
+			// on retire le sommet de la file
 			f.remove();
-			p++;
 		}
 	}
 
+	/**
+	 * Affiche le parcours en profondeur d'un graphe donnï¿½
+	 * 
+	 * @param g le graphe sur lequel appliquer l'algorithme
+	 * @param a le sommet de dï¿½part
+	 */
 	public static void ParcoursProfondeur(Graph g, Vertex a) {
-		boolean[] marque = new boolean[g.getVerticesNb()];
-		int[] traite = new int[g.getVerticesNb()];
-		Stack<Vertex> pile = new Stack<Vertex>();
+		boolean[] marque = new boolean[g.getVerticesNb()]; // garde trace des sommets visitï¿½s
+		int[] traite = new int[g.getVerticesNb()]; // garde trace de l'ordre de passage de chaque sommet
 		int p = 1;
+		
+		Stack<Vertex> pile = new Stack<Vertex>();
 
 		// Initialisation
 		for (Vertex v : g.getListVertices()) {
@@ -61,16 +80,20 @@ public abstract class Algorithmes {
 		}
 		pile.add(a);
 
-		Vertex v;
+		// Tant que la pile n'est pas vide
 		while (!pile.empty()) {
-			v = pile.pop();
+			// On rï¿½cupï¿½re et retire le sommet en haut de la pile
+			Vertex v = pile.pop();
 
+			// Si le sommet n'a pas ï¿½tï¿½ visitï¿½ on le marque comme tel, on garde en mï¿½moire son ordre de passage
+			// et on l'affiche dans la console
 			if (!marque[v.getId()]) {
 				marque[v.getId()] = true;
 				traite[v.getId()] = p++;
 				System.out.println(v.getId());
 			}
 
+			// On ajoute les voisins du sommet actuel dans la pile, ï¿½ condition qu'ils n'aient pas dï¿½jï¿½ ï¿½tï¿½ visitï¿½s
 			List<Vertex> neighbors = g.getNeighbors(v);
 			for (Vertex n : neighbors) {
 				if (!marque[n.getId()]) {
@@ -80,9 +103,17 @@ public abstract class Algorithmes {
 		}
 	}
 
+	/**
+	 * Applique l'algorithme de Dijkstra classique sur le graphe donnï¿½
+	 * 
+	 * @param g le graphe sur lequel appliquer l'algorithme
+	 * @param s le sommet de dï¿½part
+	 * @return le tableau des distances minimales de chaque sommet par rapport au point de dï¿½part
+	 */
 	public static double[] dijkstra(Graph g, int s) {
 		int verticesNb = g.getVerticesNb();
 
+		// On utilise une hashmap qui associe l'id d'un vertex au vertex lui mï¿½me
 		Map<Integer, Vertex> z = new HashMap<Integer, Vertex>();
 		for (Vertex v : g.getListVertices()) {
 			if (v.getId() != s) {
@@ -99,27 +130,31 @@ public abstract class Algorithmes {
 			dist[e.getIndexFinalVertex()] = e.getValue(0);
 		}
 
-		while (!z.isEmpty()) { // temps constant ? à vérifier
+		// Tant que l'ensemble Z n'est pas vide
+		while (!z.isEmpty()) { // vï¿½rification en temps constant
 			double distMin = Double.MAX_VALUE;
 			int idMin = -1;
 
+			// on cherche le sommet x de Z dont la valeur est minimale
 			for (int i : z.keySet()) {
-				if (dist[i] < distMin) { // temps constant
+				if (dist[i] < distMin) {
 					idMin = i;
 					distMin = dist[i];
 				}
 			}
 
+			// Si tous les sommets ont une valeur infinie on sort de la boucle
 			if (idMin == -1) {
 				break;
 			}
 
 			Vertex x = g.getVertex(idMin);
-			z.remove(idMin); // temps constant
+			z.remove(idMin); // opï¿½ration en temps constant
 
+			// Pour chaque voisin de x, on regarde s'il est dans l'ensemble Z, et si oui on met ï¿½ jour sa valeur si c'est nï¿½cessaire
 			for (Edge e : g.getListAdjacent(x.getId())) {
 				int neighborId = e.getIndexFinalVertex();
-				if (z.containsKey(neighborId)) { // temps constant
+				if (z.containsKey(neighborId)) { // opï¿½ration en temps constant
 					if (dist[x.getId()] + e.getValue(0) < dist[neighborId]) {
 						dist[neighborId] = dist[x.getId()] + e.getValue(0);
 					}
@@ -129,10 +164,19 @@ public abstract class Algorithmes {
 		return dist;
 	}
 
+	/**
+	 * Applique l'algorithme A* sur le graphe donnï¿½
+	 * 
+	 * @param g le graphe sur lequel appliquer l'algorithme
+	 * @param s le sommet de dï¿½part
+	 * @param d le sommet d'arrivï¿½e
+	 * @return la liste des arï¿½tes qui constituent le chemin le plus court de s ï¿½ d
+	 */
 	public static ListEdges aEtoile(Graph g, int s, int d) throws Exception {
 		int verticesNb = g.getVerticesNb();
 		ListEdges chemin = new ListEdges();
 
+		// On utilise une hashmap qui associe l'id d'un vertex au vertex lui mï¿½me
 		Map<Integer, Vertex> z = new HashMap<Integer, Vertex>();
 		for (Vertex v : g.getListVertices()) {
 			if (v.getId() != s) {
@@ -144,7 +188,7 @@ public abstract class Algorithmes {
 		double[] estimation = new double[verticesNb];
 		int[] predecessor = new int[verticesNb];
 
-		// Initialisation des distances et prédécesseurs
+		// Initialisation des distances et prï¿½dï¿½cesseurs
 		Arrays.fill(dist, Double.MAX_VALUE);
 		Arrays.fill(predecessor, -1);
 		dist[s] = 0;
@@ -158,10 +202,12 @@ public abstract class Algorithmes {
 			estimation[i] = Graph.calcDist(g.getVertex(i), g.getVertex(d));
 		}
 
+		// Tant que l'ensemble Z n'est pas vide
 		while (!z.isEmpty()) {
 			double distMin = Double.MAX_VALUE;
 			int idMin = -1;
 
+			// on cherche le sommet x de Z dont la valeur estimï¿½e est minimale
 			for (int i : z.keySet()) {
 				if (dist[i] + estimation[i] < distMin) {
 					idMin = i;
@@ -169,10 +215,10 @@ public abstract class Algorithmes {
 				}
 			}
 
-			// Destination inatteignable
+			// Si la destination est inatteignable
 			if (idMin == -1) {
 				throw new Exception("Destination inatteignable !");
-			} else if (idMin == d) { // Destination atteinte
+			} else if (idMin == d) { // Si la destination est atteinte
 				int index = d;
 				while (index != -1) {
 					int previous = predecessor[index];
@@ -204,34 +250,50 @@ public abstract class Algorithmes {
 		return null;
 	}
 
+	/**
+	 * Applique l'algorithme de Dijkstra sur le graphe donnï¿½.
+	 * Utilise pour cela un tas de Fibonacci.
+	 * 
+	 * @param g le graphe sur lequel appliquer l'algorithme
+	 * @param s le sommet de dï¿½part
+	 * @return le tableau des distances minimales de chaque sommet par rapport au point de dï¿½part
+	 */
 	public static double[] dijkstraFibonacci(Graph g, int s) {
 		int verticesNb = g.getVerticesNb();
 
 		double[] dist = new double[verticesNb];
 		boolean[] marque = new boolean[verticesNb];
 
+		// La hashmap va nous permettre d'accï¿½der aux sommets stockï¿½s dans le tas de Fibonacci pour pouvoir les modifier plus tard.
+		// On associe pour cela un id de vertex ï¿½ "l'entrï¿½e" du tas de Fibonacci qui lui correspond.
 		FibonacciHeap<Vertex> fiboHeap = new FibonacciHeap<Vertex>();
 		Map<Integer, Entry<Vertex>> vertexEntries = new HashMap<Integer, Entry<Vertex>>();
 
 		// Initialisation
 		Arrays.fill(dist, Double.MAX_VALUE);
 		dist[s] = 0;
-
+		
+		// On met s dans le tas
 		Entry<Vertex> initialEntry = fiboHeap.enqueue(g.getVertex(s), 0);
 		vertexEntries.put(s, initialEntry);
-
+		
+		// Tant que le tas n'est pas vide
 		while (!fiboHeap.isEmpty()) {
+			// On rï¿½cupï¿½re et supprime du tas le sommet de valeur minimale
 			int vertexId = fiboHeap.dequeueMin().getValue().getId();
 			vertexEntries.remove(vertexId);
-			marque[vertexId] = true;
+			marque[vertexId] = true; // on le marque comme visitï¿½
 
+			// On parcourt les voisins du sommet
 			for (Edge e : g.getListAdjacent(vertexId)) {
 				int neighborId = e.getIndexFinalVertex();
 
-				if (marque[neighborId] == false) {
+				if (marque[neighborId] == false) { // Si le voisin n'a pas ï¿½tï¿½ visitï¿½
 					double newValue = dist[vertexId] + e.getValue(0);
-					if (newValue < dist[neighborId]) {
+					if (newValue < dist[neighborId]) { // Si on doit mettre ï¿½ jour sa valeur
 
+						// Soit le voisin n'ï¿½tait pas dans le tas de Fibonacci et on l'ajoute avec sa valeur modifiï¿½e,
+						// soit le voisin ï¿½tait dï¿½jï¿½ dans le tas de Fibonacci et on ne fait que modifier sa valeur
 						if (dist[neighborId] < Double.MAX_VALUE) {
 							Entry<Vertex> entry = vertexEntries.get(neighborId);
 							fiboHeap.decreaseKey(entry, newValue);
@@ -248,10 +310,17 @@ public abstract class Algorithmes {
 		return dist;
 	}
 
+	/**
+	 * Problï¿½me de la question 6
+	 * Dï¿½termine la commune dont la moyenne de ses distances avec les villes de plus de n habitants est minimale
+	 * 
+	 * @param g le graphe sur lequel appliquer l'algorithme
+	 * @param n le seuil minimal pour considï¿½rer une ville comme "grande"
+	 */
 	public static void VRP1(Graph g, int n) {
 		int nbCommunes = g.getVerticesNb();
 
-		// on cherche les villes de plus de n habitants
+		// On cherche les villes de plus de n habitants
 		List<Vertex> villes = new ArrayList<Vertex>();
 		for (int i = 0; i < nbCommunes; i++) {
 			Vertex v = g.getVertex(i);
@@ -260,15 +329,14 @@ public abstract class Algorithmes {
 			}
 		}
 
-		// on applique dijkstra pour chaque ville et on stocke les tableaux des
-		// distances obtenus
+		// On applique dijkstra pour chaque ville et on stocke les tableaux des distances obtenus
 		List<double[]> distancesVilles = new ArrayList<double[]>();
 		for (Vertex ville : villes) {
 			double[] distances = Algorithmes.dijkstraFibonacci(g, ville.getId());
 			distancesVilles.add(distances);
 		}
 
-		// on fait la moyenne des différents tableaux des distances de chaque ville
+		// On fait la moyenne des diffï¿½rents tableaux des distances de chaque ville
 		double[] moyennes = new double[nbCommunes];
 		for (double[] distancesVille : distancesVilles) {
 			for (int i = 0; i < nbCommunes; i++) {
@@ -280,7 +348,7 @@ public abstract class Algorithmes {
 			}
 		}
 
-		// on cherche la commune dont la distance moyenne à chaque ville est minimale
+		// On cherche la commune dont la distance moyenne ï¿½ chaque ville est minimale
 		int indexMin = -1;
 		double moyenneMin = Double.MAX_VALUE;
 		for (int i = 0; i < nbCommunes; i++) {
@@ -290,12 +358,13 @@ public abstract class Algorithmes {
 			}
 		}
 
+		// Affichage du rï¿½sultat
 		if (moyenneMin != Double.MAX_VALUE) {
 			System.out.println(g.getVertex(indexMin).getName() + " a la plus petite moyenne des distances de : "
-					+ (int) moyenneMin + "km");
+					+ (int) moyenneMin + " km");
 		} else {
 			System.out.println(
-					"Le graphe n'est pas suffisamment connexe pour permettre l'accès à toutes les grandes villes");
+					"Le graphe n'est pas suffisamment connexe pour permettre l'accï¿½s ï¿½ toutes les grandes villes");
 		}
 	}
 
@@ -313,7 +382,7 @@ public abstract class Algorithmes {
 		int edgeCounter = 0;
 		int idCurrent = 0;
 
-		// on part de la premiere grande ville et on la relie à sa plus proche voisine 
+		// on part de la premiere grande ville et on la relie ï¿½ sa plus proche voisine 
 		while (nbMarque < nbVilles - 1) {
 			double distPPV = Double.MAX_VALUE;
 			int idPPV = -1;
@@ -344,7 +413,7 @@ public abstract class Algorithmes {
 		
 		ListEdges trajet = new ListEdges();
 		
-		// pour chaque arete reliant deux grandes villes, on trouve le chemin passant par les petites communes intermédiaires avec A*
+		// pour chaque arete reliant deux grandes villes, on trouve le chemin passant par les petites communes intermï¿½diaires avec A*
 		for(Edge edge : gVilles.getListEdges()) {
 			int idInitial = edge.getIndexInitialVertex();
 			int idFinal = edge.getIndexFinalVertex();
