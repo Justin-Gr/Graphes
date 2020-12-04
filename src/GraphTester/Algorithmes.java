@@ -15,6 +15,7 @@ import GraphStructure.ListEdges;
 import GraphStructure.Vertex;
 import ToolBox.FibonacciHeap;
 import ToolBox.FibonacciHeap.Entry;
+import ToolBox.GraphLoader;
 
 public abstract class Algorithmes {
 	public static void ParcoursLargeur(Graph g, Vertex a) {
@@ -179,7 +180,7 @@ public abstract class Algorithmes {
 						previous = s;
 						break;
 					}
-					Edge e = new Edge (0, previous, index, 1);
+					Edge e = new Edge(0, previous, index, 1);
 					e.setValue(0, dist[index] - dist[previous]);
 					chemin.add(e);
 					index = predecessor[index];
@@ -215,10 +216,10 @@ public abstract class Algorithmes {
 		// Initialisation
 		Arrays.fill(dist, Double.MAX_VALUE);
 		dist[s] = 0;
-		
+
 		Entry<Vertex> initialEntry = fiboHeap.enqueue(g.getVertex(s), 0);
 		vertexEntries.put(s, initialEntry);
-		
+
 		while (!fiboHeap.isEmpty()) {
 			int vertexId = fiboHeap.dequeueMin().getValue().getId();
 			vertexEntries.remove(vertexId);
@@ -239,7 +240,7 @@ public abstract class Algorithmes {
 							vertexEntries.put(neighborId, entry);
 						}
 						dist[neighborId] = newValue;
-						
+
 					}
 				}
 			}
@@ -298,7 +299,68 @@ public abstract class Algorithmes {
 		}
 	}
 
-	public static void VRP2(Graph g, int n) {
-		// TODO
+	public static ListEdges VRP2(Graph g, int n) throws Exception {
+		List<Integer> tableIndex = new ArrayList<Integer>();
+		
+		// on extrait le graphe des grandes villes sans aucune arete
+		Graph gVilles = GraphLoader.genererSousGrapheGrandesVilles(g, n, tableIndex);
+		System.out.println(gVilles.getListVertices());
+
+		int nbVilles = gVilles.getVerticesNb();
+		boolean[] marque = new boolean[nbVilles];
+		int nbMarque = 0;
+
+		int edgeCounter = 0;
+		int idCurrent = 0;
+
+		// on part de la premiere grande ville et on la relie à sa plus proche voisine 
+		while (nbMarque < nbVilles - 1) {
+			double distPPV = Double.MAX_VALUE;
+			int idPPV = -1;
+
+			for (int i = 0; i < nbVilles; i++) {
+				if (idCurrent != i && !marque[i]) {
+					double dist = Graph.calcDist(gVilles.getVertex(idCurrent), gVilles.getVertex(i));
+					if (dist < distPPV) {
+						distPPV = dist;
+						idPPV = i;
+					}
+				}
+			}
+			Edge e = new Edge(edgeCounter++, idCurrent, idPPV, 1);
+			e.setValue(0, distPPV);
+			gVilles.addEdge(e);
+			marque[idCurrent] = true;
+			nbMarque++;
+			idCurrent = idPPV;
+		}
+		
+		// on ferme la boucle en reliant la derniere grande ville a la premiere
+		double dist = Graph.calcDist(gVilles.getVertex(idCurrent), gVilles.getVertex(0));
+		Edge lastEdge = new Edge(edgeCounter++, idCurrent, 0, 1);
+		lastEdge.setValue(0, dist);
+		gVilles.addEdge(lastEdge);
+		
+		
+		ListEdges trajet = new ListEdges();
+		
+		// pour chaque arete reliant deux grandes villes, on trouve le chemin passant par les petites communes intermédiaires avec A*
+		for(Edge edge : gVilles.getListEdges()) {
+			int idInitial = edge.getIndexInitialVertex();
+			int idFinal = edge.getIndexFinalVertex();
+			try {
+				ListEdges chemin = Algorithmes.aEtoile(g, tableIndex.get(idInitial), tableIndex.get(idFinal));
+				for(Edge e : chemin) {
+					// on ajoute les aretes intermediaires au trajet total
+					trajet.add(e);
+					System.out.println("( " + g.getVertex(e.getIndexInitialVertex()).getName() + " - " + g.getVertex(e.getIndexFinalVertex()).getName() + " ) ");
+				}
+				System.out.println();
+			} catch (Exception ex) {
+				throw(ex);
+			}
+		}
+		
+		return trajet;
 	}
 }

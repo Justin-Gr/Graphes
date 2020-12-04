@@ -127,6 +127,10 @@ public class Graph {
 	public ListVertices getListVertices() {
 		return this.listVertices;
 	}
+	
+	public ListEdges getListEdges() {
+		return this.listEdges;
+	}
 
 	public List<Vertex> getNeighbors(Vertex vertex) {
 		LinkedList<Edge> list = listAdjacent.get(vertex.getId());

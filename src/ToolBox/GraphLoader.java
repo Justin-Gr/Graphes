@@ -128,7 +128,7 @@ public abstract class GraphLoader {
 	}
 	
 	public static Graph genererSousGrapheGrandesVilles(Graph g, int n, List<Integer> tableIndex) {
-		Graph sg = new Graph("Carte grandes villes", false, 0, 3, 0, 1);
+		Graph sg = new Graph("Carte grandes villes", true, 0, 3, 0, 1);
 		
 		int vertexCounter = 0;
 		for (int i = 0; i < g.getVerticesNb(); i++) {
@@ -137,16 +137,6 @@ public abstract class GraphLoader {
 				tableIndex.add(vertexCounter, v.getId());
 				Vertex toAdd = new Vertex(vertexCounter++, v.getName(), v.getValue(0), v.getValue(1), v.getValue(2));
 				sg.addVertex(toAdd);
-			}
-		}
-		
-		int edgeCounter = 0;
-		for (int i = 0; i < sg.getVerticesNb(); i++) {
-			for (int j = i + 1; j < sg.getVerticesNb(); j++) {
-				double dist = Graph.calcDist(sg.getVertex(i), sg.getVertex(j));
-				Edge edge = new Edge(edgeCounter++, i, j, 1);
-				edge.setValue(0, dist);
-				sg.addEdge(edge);
 			}
 		}
 		
